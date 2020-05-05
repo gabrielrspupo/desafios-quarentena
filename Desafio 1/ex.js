@@ -108,28 +108,32 @@ function updateOpponentHp(newHP) {
   opponentHpElement.style.width = barWidth + '%';
 }
 
-// *************************************************************************************
-// Here you need to implement the player attack function that receives the used attack
-// return false if attack misses
-// otherwise update opponents health and return true
-// *************************************************************************************
+// player attack function that receives the used attack
 function playerAttack(attack) {
   // 0: return false if attack misses
   // 1: otherwise update opponents health and return true
+
+  // if attack misses, end turn
+  if (willAttackMiss(attack.accuracy))
+    return 0;
+  
+  // update opponent's health
+  updateOpponentHp(opponentHp - attack.power);
+  return 1;
 }
-
-
-// *************************************************************************************
-// Here you need to implement the opponent attack function that receives the used attack
-// return false if attack misses
-// otherwise update player health and return true
-// *************************************************************************************
 
 // opponent attack function that receives the used attack
 function opponentAttack(attack) {
   // 0: return false if attack misses
-  
   // 1: otherwise update player health and return true
+
+  // if attack misses, end turn
+  if (willAttackMiss(attack.accuracy))
+    return 0;
+
+  // update player's health
+  updatePlayerHp(playerHp - attack.power);
+  return 1;
 }
 
 function chooseOpponentAttack () {
