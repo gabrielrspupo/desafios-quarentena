@@ -1,13 +1,25 @@
 const playerHpElement = document.getElementById('player-health');
-const playerTotalHp = 274;
-let playerHp = 274;
+const playerTotalHp = 280;
+let playerHp = 280;
 
 const opponentHpElement = document.getElementById('opponent-health');
-const opponentTotalHp = 322;
-let opponentHp = 322;
+const opponentTotalHp = 380;
+let opponentHp = 380;
 
 const turnText = document.getElementById('text');
 let isTurnHappening = false;
+
+const playerInfo = {
+  name: 'Simões',
+  type: ['human', 'assembly'],
+  stage: 0
+}
+
+const opponentInfo = {
+  name: 'Mello',
+  type: ['human', 'gcc'],
+  stage: 0
+}
 
 const playerAttacks = {
   arduinoFlamejante: {
@@ -108,6 +120,16 @@ function updateOpponentHp(newHP) {
   opponentHpElement.style.width = barWidth + '%';
 }
 
+function isWeakness(characterType, attackType) {
+  // 0: return false if attack type is not character's weakness
+  // 1: return true if it is character's weakness
+  if (characterType == "human" && attackType == "electric")
+    return 1;
+  if (characterType == "assembly" && attackType == "pointer")
+    return 1;
+  return 0;
+}
+
 // player attack function that receives the used attack
 function playerAttack(attack) {
   // 0: return false if attack misses
@@ -117,8 +139,13 @@ function playerAttack(attack) {
   if (willAttackMiss(attack.accuracy))
     return 0;
   
+  // check if attack type is opponent's weakness
+  let { type: opponentType, stage: opponentStage } = opponentInfo,
+      weaknessIndex = 0.25,
+      multiplyer = 1 + (weaknessIndex * isWeakness(opponentType[opponentStage], attack.type));
+  
   // update opponent's health
-  updateOpponentHp(opponentHp - attack.power);
+  updateOpponentHp(opponentHp - attack.power * multiplyer);
   return 1;
 }
 
@@ -131,8 +158,13 @@ function opponentAttack(attack) {
   if (willAttackMiss(attack.accuracy))
     return 0;
 
+  // check if attack type is player's weakness
+  let { type: playerType, stage: playerStage } = playerInfo,
+      weaknessIndex = 0.25,
+      multiplyer = 1 + (weaknessIndex * isWeakness(playerType[playerStage], attack.type));
+
   // update player's health
-  updatePlayerHp(playerHp - attack.power);
+  updatePlayerHp(playerHp - attack.power * multiplyer);
   return 1;
 }
 
