@@ -13,13 +13,15 @@ let stageTransition = false;
 const playerInfo = {
   name: 'Simões',
   type: ['human', 'assembly'],
-  stage: 0
+  stage: 0,
+  frozen: 0
 }
 
 const opponentInfo = {
   name: 'Mello',
   type: ['human', 'gcc'],
-  stage: 0
+  stage: 0,
+  frozen: 0
 }
 
 const playerAttacks = {
@@ -30,8 +32,8 @@ const playerAttacks = {
     type: 'electric',
   },
   raioBioinspirado: {
-    power: 40,
-    accuracy: 100,
+    power: 80,
+    accuracy: 80,
     name: 'Raio Bioinspirado',
     type: 'normal',
   },
@@ -42,10 +44,11 @@ const playerAttacks = {
     type: 'electric',
   },
   submissaoRobotica: {
-    power: 80,
+    power: 60,
     accuracy: 80,
     name: 'Submissão Robótica',
     type: 'fighting',
+    freezingAccuracy: 60
   }
 }
 
@@ -90,7 +93,9 @@ function gameOver (winner) {
 
 // Check if attacks misses
 function willAttackMiss (accuracy) {
-  return Math.floor(Math.random() * 100) > accuracy;
+  if (accuracy)
+    return Math.floor(Math.random() * 100) > accuracy;
+  return 0;
 }
 
 function updatePlayerHp(newHP) {
@@ -178,7 +183,9 @@ function playerAttack(attack) {
   // if attack misses, end turn
   if (willAttackMiss(attack.accuracy))
     return 0;
-  
+  if (willAttackMiss(attack.freezingAccuracy))
+    opponentInfo['frozen'] = 2;
+
   if (attack.type == 'healing')
     updatePlayerHp(playerHp + attack.healing);
   else {
@@ -238,33 +245,41 @@ function turn(playerChosenAttack) {
   // Update HTML text with the used attack
   turnText.innerText = 'Simões usou ' + playerChosenAttack.name;
 
+  if (opponentInfo.frozen == 2)
+    turnText.innerText += ', e congelou Mello por 2 rodadas!'
+
   // Update HTML text in case the attack misses
   if (!didPlayerHit) {
     turnText.innerText += ', mas errou!';
   }
 
   // Wait 2000ms to execute opponent attack (Player attack animation time)
+  let opponentTurn = (opponentInfo.frozen > 0) ? 0 : 2000;
+
   setTimeout(() => {
     // Randomly chooses opponents attack
     const opponentChosenAttack = chooseOpponentAttack();
 
-    const didOpponentHit = opponentAttack(opponentChosenAttack);
+    if (opponentInfo.frozen == 0) {
+      const didOpponentHit = opponentAttack(opponentChosenAttack);
 
-    // Update HTML text with the used attack
-    turnText.innerText = 'Mello usou ' + opponentChosenAttack.name;
+      // Update HTML text with the used attack
+      turnText.innerText = 'Mello usou ' + opponentChosenAttack.name;
 
-    // Update HTML text in case the attack misses
-    if (!didOpponentHit) {
-      turnText.innerText += ', mas errou!';
-    }
+      // Update HTML text in case the attack misses
+      if (!didOpponentHit) {
+        turnText.innerText += ', mas errou!';
+      }
+    } else
+      opponentInfo['frozen']--;
 
-    // Wait 2000ms to end the turn (Opponent attack animation time)
+    // Wait 2000ms to end the turn (Opponent attack animation time)    
     setTimeout(() => {
       // Update HTML text for the next turn
       turnText.innerText = 'Escolha um ataque';
       isTurnHappening = false;
     }, 2000);
-  }, 2000);
+  }, opponentTurn);
 }
 
 // Set buttons click interaction
