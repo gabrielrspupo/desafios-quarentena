@@ -72,7 +72,7 @@ button {
   position: relative;
 }
 
-#mello img {
+#mello-sprite {
   position: relative;
   left: 10px;
   z-index: 1;
@@ -99,7 +99,7 @@ button {
  padding: 0 20px;
 }
 
-#simoes img {
+#simoes-sprite {
   position: relative;
   z-index: 1;
   width: inherit;
@@ -134,4 +134,12 @@ button {
 
 .row {
   display: flex;
+}
+
+.row-evolve {
+  display: none;
+}
+
+#restauracao-sistematica-button, #fonte-onipotente-button {
+  color: var(--red);
 }

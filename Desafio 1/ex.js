@@ -1,13 +1,14 @@
 const playerHpElement = document.getElementById('player-health');
-const playerTotalHp = 280;
+let playerTotalHp = 280;
 let playerHp = 280;
 
 const opponentHpElement = document.getElementById('opponent-health');
-const opponentTotalHp = 380;
+let opponentTotalHp = 380;
 let opponentHp = 380;
 
 const turnText = document.getElementById('text');
 let isTurnHappening = false;
+let stageTransition = false;
 
 const playerInfo = {
   name: 'Simões',
@@ -93,31 +94,70 @@ function willAttackMiss (accuracy) {
 }
 
 function updatePlayerHp(newHP) {
-  // Prevents the HP to go lower than 0
+  // Prevents the HP to go off boundaries
   playerHp = Math.max(newHP, 0);
+  playerHp = Math.min(playerHp, playerTotalHp);
 
   // If player health is equal 0 opponent wins
-  if (playerHp === 0) {
-    gameOver('Mello');
-  }
+  setTimeout(() => {
+    if (playerHp === 0 && !stageTransition) {
+      gameOver('Mello');
+    }
+  }, 1000);
 
-  // Update the player hp bar
+    // Update the player hp bar
   const barWidth = (playerHp / playerTotalHp) * 100;
   playerHpElement.style.width = barWidth + '%';
+  
 }
 
 function updateOpponentHp(newHP) {
-  // Prevents the HP to go lower than 0
+  // Prevents the HP to go off boundaries
+  console.log(opponentHp)
   opponentHp = Math.max(newHP, 0);
+  opponentHp = Math.min(opponentHp, opponentTotalHp);
+  console.log(opponentHp)
 
   // If oppont health is equal 0 player wins
   if (opponentHp === 0) {
-    gameOver('Simões');
+    if (playerInfo.stage == 1)
+      gameOver('Simões')
+    else {
+      stageTransition = true;
+      nextStage()
+    }
   }
 
   // Update the opponents hp bar
   const barWidth = (opponentHp / opponentTotalHp) * 100;
   opponentHpElement.style.width = barWidth + '%';
+}
+
+function nextStage () {
+  setTimeout(() => {
+    alert("Prepare-se para a fase final!");
+    document.getElementById("mello-sprite").src = "assets/mello_evolved.png"
+    document.getElementById("simoes-sprite").src = "assets/simoes_evolved.png"
+    document.getElementById("fight").style.backgroundImage = "url('/assets/icmc_evolved.jpg')"
+
+    setTimeout(() => {
+      playerInfo['stage'] = 1
+      opponentInfo['stage'] = 1
+
+      playerTotalHp *= 2
+      updatePlayerHp(playerTotalHp);
+      opponentTotalHp *= 2.75
+      updateOpponentHp(opponentTotalHp);
+
+      playerAttacks['restauracaoSistematica'] = { power: 0, accuracy: 65, healing: 80, name: 'Restauração Sistemática', type: 'healing' }
+      playerAttacks['fonteOnipotente'] = { power: 220, accuracy: 35, name: 'Fonte Onipotente', type: 'electric'}
+      opponentAttacks['curaValgrindiana'] = { power: 0, accuracy: 50, healing: 70, name: 'Cura Valgrindiana', type: 'healing'}
+      opponentAttacks['sudoKillall'] = { power: 220, accuracy: 30, name: 'sudo killall', type: 'purge'}
+
+      document.getElementsByClassName("row-evolve")[0].style.display = "flex";
+    }, 1000)
+    stageTransition = false;
+  }, 1000)
 }
 
 function isWeakness(characterType, attackType) {
@@ -134,18 +174,23 @@ function isWeakness(characterType, attackType) {
 function playerAttack(attack) {
   // 0: return false if attack misses
   // 1: otherwise update opponents health and return true
-
+  
   // if attack misses, end turn
   if (willAttackMiss(attack.accuracy))
     return 0;
   
-  // check if attack type is opponent's weakness
-  let { type: opponentType, stage: opponentStage } = opponentInfo,
-      weaknessIndex = 0.25,
-      multiplyer = 1 + (weaknessIndex * isWeakness(opponentType[opponentStage], attack.type));
-  
-  // update opponent's health
-  updateOpponentHp(opponentHp - attack.power * multiplyer);
+  if (attack.type == 'healing')
+    updatePlayerHp(playerHp + attack.healing);
+  else {
+    // check if attack type is opponent's weakness
+    let { type: opponentType, stage: opponentStage } = opponentInfo,
+        weaknessIndex = 0.25,
+        multiplyer = 1 + (weaknessIndex * isWeakness(opponentType[opponentStage], attack.type));
+    
+    // update opponent's health
+    updateOpponentHp(opponentHp - attack.power * multiplyer);
+    console.log(`O ataque do jogador tirou ${attack.power * multiplyer} de HP`)
+  }
   return 1;
 }
 
@@ -158,13 +203,18 @@ function opponentAttack(attack) {
   if (willAttackMiss(attack.accuracy))
     return 0;
 
-  // check if attack type is player's weakness
-  let { type: playerType, stage: playerStage } = playerInfo,
-      weaknessIndex = 0.25,
-      multiplyer = 1 + (weaknessIndex * isWeakness(playerType[playerStage], attack.type));
-
-  // update player's health
-  updatePlayerHp(playerHp - attack.power * multiplyer);
+  if (attack.type == 'healing')
+    updateOpponentHp(opponentHp + attack.healing)
+  else {
+    // check if attack type is player's weakness
+    let { type: playerType, stage: playerStage } = playerInfo,
+        weaknessIndex = 0.075,
+        multiplyer = 1 + (weaknessIndex * isWeakness(playerType[playerStage], attack.type));
+    
+    // update player's health
+    updatePlayerHp(playerHp - attack.power * multiplyer);
+    console.log(`O ataque do oponente tirou ${attack.power * multiplyer} de HP`)
+  }
   return 1;
 }
 
@@ -229,4 +279,10 @@ document.getElementById('tira-tampa-button').addEventListener('click', function(
 });
 document.getElementById('submissao-robotica-button').addEventListener('click', function() {
   turn(playerAttacks.submissaoRobotica);
+});
+document.getElementById('restauracao-sistematica-button').addEventListener('click', function() {
+  turn(playerAttacks.restauracaoSistematica);
+});
+document.getElementById('fonte-onipotente-button').addEventListener('click', function() {
+  turn(playerAttacks.fonteOnipotente);
 });
