@@ -3,63 +3,63 @@ const playerTotalHp = 274;
 let playerHp = 274;
 
 const opponentHpElement = document.getElementById('opponent-health');
-const opponentTotalHp = 292;
-let opponentHp = 292;
+const opponentTotalHp = 322;
+let opponentHp = 322;
 
 const turnText = document.getElementById('text');
 let isTurnHappening = false;
 
 const playerAttacks = {
-  thunderShock: {
+  arduinoFlamejante: {
     power: 40,
     accuracy: 100,
-    name: 'Thunder Shock',
+    name: 'Arduíno Flamejante',
     type: 'electric',
   },
-  quickAttack: {
+  raioBioinspirado: {
     power: 40,
     accuracy: 100,
-    name: 'Quick Attack',
+    name: 'Raio Bioinspirado',
     type: 'normal',
   },
-  thunder: {
+  tiraTampa: {
     power: 110,
     accuracy: 70,
-    name: 'Thunder',
+    name: 'Tira a Tampa',
     type: 'electric',
   },
-  submission: {
+  submissaoRobotica: {
     power: 80,
     accuracy: 80,
-    name: 'Submission',
+    name: 'Submissão Robótica',
     type: 'fighting',
   }
 }
 
 const opponentAttacks = {
-  tackle: {
+  desarranjoHeap: {
     power: 40,
     accuracy: 100,
-    name: 'Tackle',
+    name: 'Desarranjo na Heap',
+    type: 'pointer',
+  },
+  stdshock: {
+    power: 40,
+    accuracy: 100,
+    name: '#include <stdshock.h>',
     type: 'normal',
   },
-  bubble: {
+  transtornadaFourier: {
     power: 40,
     accuracy: 100,
-    name: 'Bubble',
-    type: 'water',
+    name: 'Transtornada de Fourier',
+    type: 'normal',
   },
-  waterGun: {
-    power: 40,
-    accuracy: 100,
-    name: 'Water Gun',
-    type: 'water',
-  },
-  hydroPump: {
+  lendarioPonteiroDuplo: {
     power: 110,
     accuracy: 80,
-    name: 'Hydro Pump',
-    type: 'water',
+    name: 'O Lendário Ponteiro Duplo',
+    type: 'pointer',
   }
 }
 
@@ -67,9 +67,9 @@ function gameOver (winner) {
   // Wait 1000 (Health loss animation)
   setTimeout(() => {
     // Update HTML text with the winner
-    turnText.innerText = winner + ' is the winner!';
+    turnText.innerText = winner + ' vence!';
     // Open alert with the winner
-    alert(winner + ' is the winner! Close this alert to play again');
+    alert(winner + ' é o vencedor! Feche este alerta para jogar novamente');
     // Reload the game
     window.location.reload();
   }, 1000);
@@ -86,7 +86,7 @@ function updatePlayerHp(newHP) {
 
   // If player health is equal 0 opponent wins
   if (playerHp === 0) {
-    gameOver('Opponent');
+    gameOver('Mello');
   }
 
   // Update the player hp bar
@@ -100,7 +100,7 @@ function updateOpponentHp(newHP) {
 
   // If oppont health is equal 0 player wins
   if (opponentHp === 0) {
-    gameOver('Player');
+    gameOver('Simões');
   }
 
   // Update the opponents hp bar
@@ -154,11 +154,11 @@ function turn(playerChosenAttack) {
   const didPlayerHit = playerAttack(playerChosenAttack);
 
   // Update HTML text with the used attack
-  turnText.innerText = 'Player used ' + playerChosenAttack.name;
+  turnText.innerText = 'Simões usou ' + playerChosenAttack.name;
 
   // Update HTML text in case the attack misses
   if (!didPlayerHit) {
-    turnText.innerText += ', but missed!';
+    turnText.innerText += ', mas errou!';
   }
 
   // Wait 2000ms to execute opponent attack (Player attack animation time)
@@ -169,32 +169,32 @@ function turn(playerChosenAttack) {
     const didOpponentHit = opponentAttack(opponentChosenAttack);
 
     // Update HTML text with the used attack
-    turnText.innerText = 'Opponent used ' + opponentChosenAttack.name;
+    turnText.innerText = 'Mello usou ' + opponentChosenAttack.name;
 
     // Update HTML text in case the attack misses
     if (!didOpponentHit) {
-      turnText.innerText += ', but missed!';
+      turnText.innerText += ', mas errou!';
     }
 
     // Wait 2000ms to end the turn (Opponent attack animation time)
     setTimeout(() => {
       // Update HTML text for the next turn
-      turnText.innerText = 'Please choose one attack';
+      turnText.innerText = 'Escolha um ataque';
       isTurnHappening = false;
     }, 2000);
   }, 2000);
 }
 
 // Set buttons click interaction
-document.getElementById('thunder-shock-button').addEventListener('click', function() {
-  turn(playerAttacks.thunderShock);
+document.getElementById('arduino-flamejante-button').addEventListener('click', function() {
+  turn(playerAttacks.arduinoFlamejante);
 });
-document.getElementById('quick-attack-button').addEventListener('click', function() {
-  turn(playerAttacks.quickAttack);
+document.getElementById('raio-bioinspirado-button').addEventListener('click', function() {
+  turn(playerAttacks.raioBioinspirado);
 });
-document.getElementById('thunder-button').addEventListener('click', function() {
-  turn(playerAttacks.thunder);
+document.getElementById('tira-tampa-button').addEventListener('click', function() {
+  turn(playerAttacks.tiraTampa);
 });
-document.getElementById('submission-button').addEventListener('click', function() {
-  turn(playerAttacks.submission);
+document.getElementById('submissao-robotica-button').addEventListener('click', function() {
+  turn(playerAttacks.submissaoRobotica);
 });

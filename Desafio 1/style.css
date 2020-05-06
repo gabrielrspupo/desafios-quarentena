@@ -1,11 +1,11 @@
 :root {
   --white: #d1d8e0;
   --gray: #a5b1c2;
-  --black: #4b6584;
+  --black: #30383e;
   --red: #fc5c65;
   --green: #26de81;
   --dark-green: #20bf6b;
-  --grass-green: #C7F899;
+  --concrete-gray: #AEA9A0;
   --blue: #4b7bec;
   --orange: #fd9644;
   --very-light-green: #D8F0D8;
@@ -35,27 +35,35 @@ button {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  max-width: 600px;
+  max-width: 850px;
   width: 100%;
-  background-color: var(--very-light-green);
   border: 5px solid var(--black);
   border-radius: 10px;
-  padding-top: 25px;
   padding-bottom: 25px;
 }
 
+#fight {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  background-image: url('/assets/icmc.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 60vh;
+}
+
 .grass {
-  width: 100%;
+  width: 75%;
   height: 50px;
-  background-color: var(--grass-green);
-  border: 2px solid var(--green);
+  background-color: var(--concrete-gray);
+  border: 2px solid var(--black);
   border-radius: 100%;
   position: relative;
   top: -25px;
 }
 
-#squirtle {
-  width: 100px;
+#mello {
+  width: 200px;
   padding: 0 20px;
   align-self: flex-end;
   display: flex;
@@ -64,10 +72,11 @@ button {
   position: relative;
 }
 
-#squirtle img {
+#mello img {
   position: relative;
   left: 10px;
   z-index: 1;
+  width: inherit;
 }
 
 #opponent-health-bar {
@@ -85,15 +94,15 @@ button {
   transition: 1000ms;
 }
 
-
-#pikachu {
- width: 100px;
+#simoes {
+ width: 150px;
  padding: 0 20px;
 }
 
-#pikachu img {
+#simoes img {
   position: relative;
   z-index: 1;
+  width: inherit;
 }
 
 #player-health-bar {
@@ -119,7 +128,7 @@ button {
 
 #options {
   background-color: var(--orange);
-  margin: 16px 0;
+  margin-bottom: 16px;
   padding: 16px 25px;
 }
 
