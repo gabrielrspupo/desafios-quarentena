@@ -246,7 +246,7 @@ function turn(playerChosenAttack) {
   turnText.innerText = 'Simões usou ' + playerChosenAttack.name;
 
   if (opponentInfo.frozen == 2)
-    turnText.innerText += ', e congelou Mello por 2 rodadas!'
+    turnText.innerText += ' e congelou Mello por 2 rodadas!'
 
   // Update HTML text in case the attack misses
   if (!didPlayerHit) {

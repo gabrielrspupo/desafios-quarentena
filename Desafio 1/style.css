@@ -49,7 +49,8 @@ button {
   background-image: url('/assets/icmc.jpg');
   background-repeat: no-repeat;
   background-size: cover;
-  height: 60vh;
+  background-position: bottom;
+  height: 56vh;
 }
 
 .grass {
@@ -122,7 +123,7 @@ button {
 
 #text {
   text-align: center;
-  font-size: 30px;
+  font-size: 15px;
   margin: 0;
 }
 
