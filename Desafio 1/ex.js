@@ -23,7 +23,24 @@ class Fighter {
   }
 
   set hp(newHP) {
-    this._hp = newHP;
+    // Prevents the HP to go off boundaries
+    this._hp = Math.max(newHP, 0);
+    this._hp = Math.min(this.hp, this.totalHp);
+  
+    // If player health is equal 0 opponent wins
+    setTimeout(() => {
+      if (this._hp === 0) {
+        if ((this.main && !stageTransition) || (!this.main && this.stage == 1)) {
+          gameOver(this.opponent);
+        } else if (this.stage == 0) {
+          stageTransition = true;
+          nextStage();
+        }
+      }
+    }, 1000);
+    // Update the player hp bar
+    const barWidth = (this._hp / this.totalHp) * 100;
+    this.updateHealthBar(barWidth);
   }
 
   set hpElement(newHpElement) {
@@ -62,40 +79,27 @@ class Fighter {
     return this.frozen;
   }
 
-  updateHp(newHP) {
-    // Prevents the HP to go off boundaries
-    this._hp = Math.max(newHP, 0);
-    this._hp = Math.min(this.hp, this.totalHp);
-  
-    // If player health is equal 0 opponent wins
-    setTimeout(() => {
-      if (this._hp === 0) {
-        if ((this.main && !stageTransition) || (!this.main && this.stage == 1)) {
-          gameOver(this.opponent);
-        } else if (this.stage == 0) {
-          stageTransition = true;
-          nextStage();
-        }
-      }
-    }, 1000);
-  
-    // Update the player hp bar
-    const barWidth = (this._hp / this.totalHp) * 100; 
-    this.hpElement.style.width = barWidth + '%';
+  updateHealthBar(barWidth) {
+    if (this.hpElement !== undefined)
+      this.hpElement.style.width = barWidth + '%';
   }
 
+  // check if fighter is frozen
   isFrozen() {
     return this.frozen > 0;
   }
 
+  // reduce frozen rounds every player turn
   defrost() {
     this.frozen--;
   }
 
+  // evolve fighter to next level
   evolve() {
     this.stage++;
   }
 
+  // check if attack is fighter's weakness
   isWeakness(attack) {
     this.weaknesses.forEach((w) => {
       if (w.fighter == this.type && w.attack == attack.type)
@@ -118,22 +122,25 @@ class Fighter {
     // if attack misses, end turn
     if (this.willAttackMiss(attack.accuracy))
       return 0;
-    if (this.willAttackMiss(attack.freezingAccuracy))
+    if (this.willAttackMiss(attack.freezingAccuracy)) {
       this.opponent.freeze = 2;
+      this.opponent.hpElement.style.backgroundColor = "var(--blue)";
+    }
     
     if (attack.type == 'healing')
-      this.updateHp(this.hp + attack.healing);
+      this.hp = this.hp + attack.healing;
     else {
       // check if attack type is opponent's weakness
       let { type: opponentType, stage: opponentStage } = this.opponent,
           multiplyer = 1 + (this.weaknessIndex * this.isWeakness(attack));
       
       // update opponent's health
-      this.opponent.updateHp(this.opponent.hp - attack.power * multiplyer);
+      this.opponent.hp = this.opponent.hp - attack.power * multiplyer;
     }
     return 1;
   }
 
+  // append a new attack to fighter
   appendAttack(callable, stats) {
     this.attacks[callable] = stats;
   }
@@ -212,8 +219,17 @@ const opponentWeaknesses = [
   }
 ]
 
-let player = new Fighter('Simões', ['human', 'assembly'], 280, document.getElementById('player-health'), playerAttacks, playerWeaknesses, 0.25, true);
-let opponent = new Fighter('Mello', ['human', 'gcc'], 380, document.getElementById('opponent-health'), opponentAttacks, opponentWeaknesses, 0.075, false);
+let player;
+let opponent;
+
+// wait until DOM is loaded to catch health bar element
+document.addEventListener("DOMContentLoaded", function(event) { 
+  player = new Fighter('Simões', ['human', 'assembly'], 280, document.getElementById('player-health'), playerAttacks, playerWeaknesses, 0.25, true);
+  opponent = new Fighter('Mello', ['human', 'gcc'], 380, document.getElementById('opponent-health'), opponentAttacks, opponentWeaknesses, 0.075, false);
+  
+  player.versus = opponent;
+  opponent.versus = player;
+});
 
 function gameOver (winner) {
   // Wait 1000 (Health loss animation)
@@ -227,21 +243,25 @@ function gameOver (winner) {
   }, 1000);
 }
 
+// load next stage
 function nextStage () {
   setTimeout(() => {
     alert("Prepare-se para a fase final!");
+    opponent.hpElement.style.backgroundColor = "var(--green)"
     document.getElementById("mello-sprite").src = "assets/mello_evolved.png"
     document.getElementById("simoes-sprite").src = "assets/simoes_evolved.png"
     document.getElementById("fight").style.backgroundImage = "url('/assets/icmc_evolved.jpg')"
+    for (let i = 0; i <= 1; ++i)
+      document.getElementsByClassName("grass")[i].style.backgroundColor = "var(--red)"
 
     setTimeout(() => {
       player.evolve();
       opponent.evolve();
 
       player.totalHp = player.totalHp * 2;
-      player.updateHp(player.totalHp);
+      player.hp = player.totalHp;
       opponent.totalHp = opponent.totalHp * 2.75;
-      opponent.updateHp(opponent.totalHp);
+      opponent.hp = opponent.totalHp;
 
       player.appendAttack('restauracaoSistematica', { power: 0, accuracy: 65, healing: 80, name: 'Restauração Sistemática', type: 'healing' })
       player.appendAttack('fonteOnipotente', { power: 220, accuracy: 35, name: 'Fonte Onipotente', type: 'electric'})
@@ -263,9 +283,6 @@ function chooseOpponentAttack () {
 }
 
 function turn(playerChosenAttack) {
-  player.versus = opponent;
-  opponent.versus = player;
-
   // Don't start another turn till the current one is not finished
   if (isTurnHappening) {
     return;
@@ -277,22 +294,16 @@ function turn(playerChosenAttack) {
   // Update HTML text with the used attack
   turnText.innerText = player.name + ' usou ' + playerChosenAttack.name;
 
-  if (opponent.frozenRounds == 2)
-    turnText.innerText += ' e congelou ' + opponent.name + ' por 2 rodadas!'
+  // if opponent just got frozen, update HTML text
+  if (opponent.frozenRounds == 2){
+    turnText.innerText += ' e incapacitou ' + opponent.name + ' por 2 rodadas!'
+  }
 
   // Update HTML text in case the attack misses
   if (!didPlayerHit) {
     turnText.innerText += ', mas errou!';
   }
 
-  // setTimeout(() => {
-  //   if (opponent.hp == 0) {
-    
-  //     turnText.innerText = 'Escolha um ataque';
-  //     isTurnHappening = false;
-  //     return;
-  //   }
-  // }, 2000);
   // Wait 2000ms to execute opponent attack (Player attack animation time)
   let opponentTurn = opponent.isFrozen() ? 0 : 2500;
 
@@ -301,6 +312,7 @@ function turn(playerChosenAttack) {
     const opponentChosenAttack = chooseOpponentAttack();
 
     if (!opponent.isFrozen()) {
+      opponent.hpElement.style.backgroundColor = "var(--green)"
       const didOpponentHit = opponent.attack(opponentChosenAttack);
 
       // Update HTML text with the used attack
@@ -310,8 +322,9 @@ function turn(playerChosenAttack) {
       if (!didOpponentHit) {
         turnText.innerText += ', mas errou!';
       }
-    } else
-      opponent.defrost();
+    } else {
+      opponent.defrost(); // reduce current frozen rounds
+    }
 
     // Wait 2000ms to end the turn (Opponent attack animation time)    
     setTimeout(() => {
