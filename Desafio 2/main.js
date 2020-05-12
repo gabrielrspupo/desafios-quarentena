@@ -67,11 +67,13 @@ class Cell {
 }
 
 class Map {
-	constructor (root, width, height, numberOfBombs) {
+	constructor (root, width, height, numberOfBombs, lives, lifeElement) {
 		this.cells = [];
 		this.width = width;
 		this.height = height;
 		this.bombCount = numberOfBombs;
+		this.lives = lives;
+		this.lifeElement = lifeElement;
 		this.hasMapBeenClickedYet = false;
 		this.isGameOver = false;
 		this.visibleCells = 0;
@@ -84,6 +86,7 @@ class Map {
 		}
 
 		root.style.gridTemplateColumns = `repeat(${width}, max-content)`;
+		lifeElement.innerText = `Vidas: ${this.lives}`
 	}
 
 	// Used to verify if the given position is outside the map bounds
@@ -153,7 +156,14 @@ class Map {
 		}
 		if (clickedCell.isBomb) {
 			clickedCell.element.style.backgroundColor = 'red';
-			this.gameOver();
+			--this.lives;
+			if (this.lives > 0) {
+				this.lifeElement.innerText = `Vidas: ${this.lives}`
+				clickedCell.reveal();
+			} else {
+				this.lifeElement.innerText = `Você perdeu!`
+				this.gameOver();
+			}
 			return;
 		}
 		clickedCell.reveal();
@@ -190,4 +200,4 @@ class Map {
 }
 
 // Instantiate a Map object
-new Map(document.getElementById('root'), 50, 30, 300);
+new Map(document.getElementById('root'), 50, 30, 300, 3, document.getElementById('lives'));
