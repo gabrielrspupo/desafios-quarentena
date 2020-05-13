@@ -80,7 +80,7 @@ class Map {
 			case 'easy':
 				this.width = 30;
 				this.height = 20;
-				this.bombCount = 75;
+				this.bombCount = 60;
 			break;
 			case 'medium':
 				this.width = 50;
@@ -88,7 +88,7 @@ class Map {
 				this.bombCount = 300;
 			break;
 			case 'hard':
-				this.width = 70;
+				this.width = 75;
 				this.height = 35;
 				this.bombCount = 650;
 			break;
@@ -102,7 +102,7 @@ class Map {
 		}
 
 		root.style.gridTemplateColumns = `repeat(${this.width}, max-content)`;
-		lifeElement.innerText = `Vidas: ${this.lives}`
+		lifeElement.innerText = `Lives: ${this.lives}`
 	}
 
 	// Used to verify if the given position is outside the map bounds
@@ -174,10 +174,14 @@ class Map {
 			clickedCell.element.style.backgroundColor = 'red';
 			--this.lives;
 			if (this.lives > 0) {
-				this.lifeElement.innerText = `Vidas: ${this.lives}`
+				this.lifeElement.innerText = `Lives: ${this.lives}`
+				this.lifeElement.style.color = 'red';
+				setTimeout(() => {
+					this.lifeElement.style.color = 'black';
+				}, 400);
 				clickedCell.reveal();
 			} else {
-				this.lifeElement.innerText = `Você perdeu!`
+				this.lifeElement.innerText = `You lost the game! Redirecting...`
 				this.gameOver();
 			}
 			return;
@@ -186,6 +190,7 @@ class Map {
 		this.visibleCells ++;
 		if (this.didPlayerWin()) {
 			setTimeout(() => alert('Congratulations, you won!'));
+			window.history.back();
 		}
 
 		// If the cell is empty, open all surrounding cells.
@@ -215,6 +220,7 @@ class Map {
 			}
 		}
 		this.isGameOver = true;
+		setTimeout(() => window.history.back(), 4000);
 	}
 }
 // fetch difficulty attribute from index.html

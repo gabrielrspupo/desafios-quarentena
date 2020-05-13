@@ -1,3 +1,48 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#container {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#formTitle {
+    font-size: large;
+    margin-bottom: 4vh;
+}
+
+input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+input[type="submit"] {
+    display: block;
+    width: 100%;
+    background: none;
+    margin-top: 2vh;
+}
+
 input:checked + label {
-    color:red;
+    background-color: #6286a5;
+    font-weight: bold;
+}
+
+label {
+    display: inline-block;
+    width: 5vw;
+    text-align: center;
+    margin: 0.5vh;
+    padding: 20px 35px;
+    background-color: #2ccfbd;
+    border-radius: 4vw;
 }
