@@ -51,6 +51,10 @@ html, body {
 	background-image: url('assets/flag.png');
 }
 
+.cross {
+	background-image: url('assets/cross.png');
+}
+
 .revealed {
 	cursor: default;
 }
