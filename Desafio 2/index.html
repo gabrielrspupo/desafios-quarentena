@@ -3,15 +3,20 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="index-style.css">
 	<title>Minesweeper</title>
 </head>
 <body>
 	<div id="container">
-		<div id="root"></div>
-		<div id="lives"></div>
+		<form name="selectGame" action="/game.html" class="form">
+			Dificuldade:
+            <input type="radio" id="easy" name="difficulty" value="easy"><label for="easy">Fácil</label>
+            <input type="radio" id="medium" name="difficulty" value="medium" checked><label for="medium">Médio</label>
+			<input type="radio" id="hard" name="difficulty" value="hard"><label for="hard">Difícil</label>
+			<br />
+			<input type="submit" value="Jogar!" onclick="setupGame()">
+		</form>
 	</div>
-	
-	<script src="main.js"></script>
+	<script src="selector.js"></script>
 </body>
 </html>

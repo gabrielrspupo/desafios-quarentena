@@ -67,25 +67,41 @@ class Cell {
 }
 
 class Map {
-	constructor (root, width, height, numberOfBombs, lives, lifeElement) {
+	constructor (root, difficulty, lives, lifeElement) {
 		this.cells = [];
-		this.width = width;
-		this.height = height;
-		this.bombCount = numberOfBombs;
 		this.lives = lives;
 		this.lifeElement = lifeElement;
+		this.difficulty = difficulty;
 		this.hasMapBeenClickedYet = false;
 		this.isGameOver = false;
 		this.visibleCells = 0;
 
-		for (let row = 0; row < height; row ++) {
+		switch (difficulty) {
+			case 'easy':
+				this.width = 30;
+				this.height = 20;
+				this.bombCount = 75;
+			break;
+			case 'medium':
+				this.width = 50;
+				this.height = 30;
+				this.bombCount = 300;
+			break;
+			case 'hard':
+				this.width = 70;
+				this.height = 35;
+				this.bombCount = 650;
+			break;
+		}
+
+		for (let row = 0; row < this.height; row ++) {
 			this.cells.push([]);
-			for (let column = 0; column < width; column ++) {
+			for (let column = 0; column < this.width; column ++) {
 				this.cells[row].push(new Cell(root, column, row, this));
 			}
 		}
 
-		root.style.gridTemplateColumns = `repeat(${width}, max-content)`;
+		root.style.gridTemplateColumns = `repeat(${this.width}, max-content)`;
 		lifeElement.innerText = `Vidas: ${this.lives}`
 	}
 
@@ -198,6 +214,8 @@ class Map {
 		this.isGameOver = true;
 	}
 }
+// fetch difficulty attribute from index.html
+let difficulty = localStorage.getItem("difficulty");
 
 // Instantiate a Map object
-new Map(document.getElementById('root'), 50, 30, 300, 3, document.getElementById('lives'));
+new Map(document.getElementById('root'), difficulty, 3, document.getElementById('lives'));
