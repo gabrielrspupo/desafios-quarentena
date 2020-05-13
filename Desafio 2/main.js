@@ -80,7 +80,7 @@ class Map {
 			case 'easy':
 				this.width = 30;
 				this.height = 20;
-				this.bombCount = 60;
+				this.bombCount = 75;
 			break;
 			case 'medium':
 				this.width = 50;
