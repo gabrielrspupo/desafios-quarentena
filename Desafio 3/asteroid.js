@@ -95,6 +95,7 @@ class Asteroid extends MovableEntity {
 		this.life --;
 		if (this.life === 0) {
 			this.mapInstance.removeEntity(this);
+			this.mapInstance.updateScore();
 			this.delete();
 		}
 	}

@@ -1,3 +1,5 @@
+const rootElement = document.getElementById('root');
+
 /**
 * This is a class declaration
 * This class is responsible for defining the Map behavior
@@ -20,6 +22,21 @@ class Map {
 
 		// This is to allow for the map to set it's difficulty based on the game's time length
 		this.gameStartTimestamp = Date.now();
+
+		let HUD = document.createElement('div');
+		HUD.style.textAlign = 'center';
+		rootElement.appendChild(HUD);
+		
+		// Current score
+		this.score = 0;
+		this.scoreElement = document.createElement('div');
+		this.scoreElement.innerHTML = `Asteroids: ${this.score}`;
+		HUD.appendChild(this.scoreElement);
+
+		this.time = 0;
+		this.timerElement = document.createElement('div');
+		this.timerElement.innerHTML = `Tempo: ${this.time}`;
+		HUD.appendChild(this.timerElement);
 	}
 
 	/**
@@ -80,12 +97,31 @@ class Map {
 		return Math.random() < asteroidSpawnChance;
 	}
 
+	/**
+	 * Updates game score when player destroys an asteroid
+	 */
+	updateScore () {
+		this.score++;
+		this.scoreElement.innerHTML = `Asteroids: ${this.score}`;
+	}
+
+	/**
+	 * Defines current timestamp every frame change
+	 */
+	timer() {
+		this.time = Date.now() - this.gameStartTimestamp;
+		this.timerElement.innerHTML = `Tempo: ${Math.floor(this.time / 1000)}`;
+	}
+	
 	/*
 	* This function should be executed every game frame. It will call all of it's
 	* movableObjects's frame functions (which will update their physics), and
 	* handle any collision that happened.
 	*/
 	frame () {
+		// Update timer
+		this.timer();
+
 		// Call the frame function on all movableEntities
 		this.movableEntities.forEach(entity => entity.frame());
 
