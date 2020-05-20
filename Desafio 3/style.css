@@ -1,11 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 * {
 	box-sizing: border-box;
+	font-family: 'Press Start 2P', serif;
+	line-height: 1.5em;
+	color: white;
+	text-shadow: white 0 0 2.5px, white 0 0 2.5px;
 }
 
 body, html {
 	margin: 0;
 	height: 100%;
 	overflow: hidden;
+	background-color: black;
 }
 
 #root {
@@ -23,9 +30,13 @@ body, html {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border: 1px solid black;
+	border: 1px solid white;
 	border-radius: 100%;
 	overflow: hidden;
+	background-image: url('assets/space.png');
+	background-position: 40px 120px;
+	background-size: contain;
+	box-shadow: 0px 0px 70px 7px rgba(255,255,255,1);;
 }
 
 #movable-entity-container {
@@ -35,4 +46,5 @@ body, html {
 
 .movable-entity {
 	position: absolute;
+	filter: invert(100%);
 }

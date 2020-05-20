@@ -30,12 +30,12 @@ class Map {
 		// Current score
 		this.score = 0;
 		this.scoreElement = document.createElement('div');
-		this.scoreElement.innerHTML = `Asteroids: ${this.score}`;
+		this.scoreElement.innerHTML = `ABATES: ${this.score}`;
 		HUD.appendChild(this.scoreElement);
 
 		this.time = 0;
 		this.timerElement = document.createElement('div');
-		this.timerElement.innerHTML = `Tempo: ${this.time}`;
+		this.timerElement.innerHTML = `TEMPO: ${this.time}`;
 		HUD.appendChild(this.timerElement);
 	}
 
@@ -102,7 +102,7 @@ class Map {
 	 */
 	updateScore () {
 		this.score++;
-		this.scoreElement.innerHTML = `Asteroids: ${this.score}`;
+		this.scoreElement.innerHTML = `ABATES: ${this.score}`;
 	}
 
 	/**
@@ -110,7 +110,7 @@ class Map {
 	 */
 	timer() {
 		this.time = Date.now() - this.gameStartTimestamp;
-		this.timerElement.innerHTML = `Tempo: ${Math.floor(this.time / 1000)}`;
+		this.timerElement.innerHTML = `TEMPO: ${Math.floor(this.time / 1000)}`;
 	}
 	
 	/*
