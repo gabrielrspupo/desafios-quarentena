@@ -22,10 +22,18 @@ class Asteroid extends MovableEntity {
 		const size = Asteroid.getRandomSize();
 		const direction = Asteroid.getRandomDirection();
 
+		let velocityRate = -0.001;
+
+		if (size >= MAX_ASTEROID_SIZE - 5) 
+			velocityRate = -0.0005
+		if (size <= MIN_ASTEROID_SIZE + 5)
+			velocityRate = -0.002;
+
+
 		// The `super` function will call the constructor of the parent class.
 		// If you'd like to know more about class inheritance in javascript, see this link
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Sub_classing_with_extends
-		super(containerElement, size, initialPosition, initialPosition.scale(-0.001), direction);
+		super(containerElement, size, initialPosition, initialPosition.scale(velocityRate), direction);
 
 		this.mapInstance = mapInstance;
 		this.rotationSpeed = Asteroid.getRandomRotationSpeed();
@@ -41,6 +49,10 @@ class Asteroid extends MovableEntity {
 		const asteroidImageIndex = Math.floor(Math.random() * 3) + 1;
 		this.rootElement.style.backgroundImage = `url('assets/asteroid-${asteroidImageIndex}.svg')`;
 		this.rootElement.style.backgroundSize = size + 'px';
+		if (size >= MAX_ASTEROID_SIZE - 5)
+			this.rootElement.style.filter = 'brightness(50%) sepia(100) saturate(100) hue-rotate(25deg)';
+		if (size <= MIN_ASTEROID_SIZE + 5) 
+			this.rootElement.style.filter = 'brightness(50%) sepia(100)';
 	}
 
 	/**
@@ -77,6 +89,9 @@ class Asteroid extends MovableEntity {
 	* @returns { number }
 	*/
 	calculateMaxLife () {
+		if (this.size >= MAX_ASTEROID_SIZE - 5)
+			return MAX_ASTEROID_LIFE + 2;
+		
 		const sizePercentage = (this.size - MIN_ASTEROID_SIZE) / (MAX_ASTEROID_SIZE - MIN_ASTEROID_SIZE);
 		return Math.round(sizePercentage * (MAX_ASTEROID_LIFE - MIN_ASTEROID_LIFE) + MIN_ASTEROID_LIFE);
 	}

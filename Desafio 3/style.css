@@ -46,5 +46,4 @@ body, html {
 
 .movable-entity {
 	position: absolute;
-	filter: invert(100%);
 }
