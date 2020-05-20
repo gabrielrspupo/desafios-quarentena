@@ -35,7 +35,7 @@ const SPREAD = 2;
 document.body.addEventListener('keydown', event => {
 	// if that key is the spacebar, the player will shoot.
 	if (event.key === ' ' && !pressedKeys[' ']) player.shoot(NORMAL);
-	if (event.key === 'z' && !pressedKeys['z']) player.shoot(POWER);
+	if (event.key === 'z' && !pressedKeys['z']) player.shoot(map.ability);
 	if (event.key === 'x' && !pressedKeys['x']) player.shoot(SPREAD);
 
 	// add the pressed key to the pressedKey dictionary
@@ -46,6 +46,17 @@ document.body.addEventListener('keydown', event => {
 document.body.addEventListener('keyup', event => {
 	// removes the pressed key to the pressedKey dictionary
 	delete pressedKeys[event.key];
+});
+
+document.body.addEventListener('click', event => {
+	switch (event.target.id) {
+		case 'power-bullet':
+			map.ability = POWER;
+			break;
+		case 'spread-bullet':
+			map.ability = SPREAD;
+			break;
+	}
 });
 
 // Registers the frame function to run at every frame.

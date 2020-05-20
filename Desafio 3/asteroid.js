@@ -107,8 +107,9 @@ class Asteroid extends MovableEntity {
 		// https://www.geeksforgeeks.org/instanceof-operator-in-javascript/
 		if (!(object instanceof Bullet)) return;
 
-		if (object.mode == 1) this.life -= 3;
-		else this.life --;
+		if (object.mode == 0) this.life --;
+		else if (object.mode == 1) this.life -= 3;
+		else if (object.mode == 2) this.life -= 0.5;
 
 		if (this.life <= 0) {
 			this.mapInstance.removeEntity(this);

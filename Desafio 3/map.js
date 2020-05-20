@@ -25,6 +25,7 @@ class Map {
 
 		let HUD = document.createElement('div');
 		HUD.style.textAlign = 'center';
+		HUD.style.width = '30vw';
 		rootElement.appendChild(HUD);
 		
 		// Current score
@@ -37,6 +38,31 @@ class Map {
 		this.timerElement = document.createElement('div');
 		this.timerElement.innerHTML = `TEMPO: ${this.time}`;
 		HUD.appendChild(this.timerElement);
+
+		this.ability = 1;
+		this.abilityElement = document.createElement('div');
+		this.abilityElement.style.display = 'flex';
+		this.abilityElement.style.justifyContent = 'space-evenly';
+
+		this.powerBulletElement = document.createElement('div');
+		this.powerBulletElement.id = 'power-bullet';
+		this.powerBulletElement.innerHTML = `POWER`;
+		this.abilityElement.appendChild(this.powerBulletElement);
+
+		this.spreadBulletElement = document.createElement('div');
+		this.spreadBulletElement.id = 'spread-bullet';
+		this.spreadBulletElement.innerHTML = `SPREAD`;
+		this.abilityElement.appendChild(this.spreadBulletElement);
+
+		HUD.appendChild(this.abilityElement);
+	}
+
+	get ability () {
+		return this._ability;
+	}
+
+	set ability (newAbility) {
+		this._ability = newAbility;
 	}
 
 	/**
