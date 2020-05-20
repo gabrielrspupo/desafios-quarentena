@@ -27,7 +27,7 @@ class Asteroid extends MovableEntity {
 		if (size >= MAX_ASTEROID_SIZE - 5) 
 			velocityRate = -0.0005
 		if (size <= MIN_ASTEROID_SIZE + 5)
-			velocityRate = -0.002;
+			velocityRate = -0.0015;
 
 
 		// The `super` function will call the constructor of the parent class.
@@ -107,8 +107,10 @@ class Asteroid extends MovableEntity {
 		// https://www.geeksforgeeks.org/instanceof-operator-in-javascript/
 		if (!(object instanceof Bullet)) return;
 
-		this.life --;
-		if (this.life === 0) {
+		if (object.mode == 1) this.life -= 3;
+		else this.life --;
+
+		if (this.life <= 0) {
 			this.mapInstance.removeEntity(this);
 			this.mapInstance.updateScore();
 			this.delete();

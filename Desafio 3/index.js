@@ -27,11 +27,16 @@ function frame () {
 // If you'd like to know more about dictionaries, see this link:
 // https://pietschsoft.com/post/2015/09/05/javascript-basics-how-to-create-a-dictionary-with-keyvalue-pairs
 const pressedKeys = {};
+const NORMAL = 0;
+const POWER = 1;
+const SPREAD = 2;
 
 // This function will run every time the player presses a key
 document.body.addEventListener('keydown', event => {
 	// if that key is the spacebar, the player will shoot.
-	if (event.key === ' ' && !pressedKeys[' ']) player.shoot();
+	if (event.key === ' ' && !pressedKeys[' ']) player.shoot(NORMAL);
+	if (event.key === 'z' && !pressedKeys['z']) player.shoot(POWER);
+	if (event.key === 'x' && !pressedKeys['x']) player.shoot(SPREAD);
 
 	// add the pressed key to the pressedKey dictionary
 	pressedKeys[event.key] = true;

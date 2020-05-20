@@ -18,7 +18,8 @@ class Bullet extends MovableEntity {
 	constructor (
 		containerElement,
 		mapInstance,
-		direction
+		direction,
+		mode
 	) {
 		// The `super` function will call the constructor of the parent class.
 		// If you'd like to know more about class inheritance in javascript, see this link
@@ -31,9 +32,13 @@ class Bullet extends MovableEntity {
 		// in the `map.js` file
 		mapInstance.addEntity(this);
 
+		this.mode = mode;
+
 		// Assigns the bullet's image to it's element
 		this.rootElement.style.backgroundImage = "url('assets/bullet.svg')";
 		this.rootElement.style.backgroundSize = this.size + 'px';
+		if (this.mode == 1)
+			this.rootElement.style.filter = 'brightness(50%) sepia(100) saturate(100) hue-rotate(25deg)';
 	}
 
 	// If the bullet collides with an asteroid, delete the bullet.
