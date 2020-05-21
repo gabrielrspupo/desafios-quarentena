@@ -34,11 +34,23 @@ const bulletMode = Object.freeze({
 	SPREAD: 2
 });
 
+const cooldown = 3000;
+let lastClick = 0;
+
 // This function will run every time the player presses a key
 document.body.addEventListener('keydown', event => {
 	// if that key is the spacebar, the player will shoot.
 	if (event.key === ' ' && !pressedKeys[' ']) player.shoot(bulletMode.NORMAL);
-	if (event.key === 'z' && !pressedKeys['z']) player.shoot(map.ability);
+	if (event.key === 'z' && !pressedKeys['z']) {
+		if (map.ability == bulletMode.POWER) {
+			let now = Date.now() - cooldown;
+			if (lastClick >= now)	return;
+
+			lastClick = Date.now();
+		}
+		
+		player.shoot(map.ability);
+	}
 
 	// add the pressed key to the pressedKey dictionary
 	pressedKeys[event.key] = true;
