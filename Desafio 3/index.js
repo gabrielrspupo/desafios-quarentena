@@ -53,10 +53,22 @@ document.body.addEventListener('keyup', event => {
 document.body.addEventListener('click', event => {
 	switch (event.target.id) {
 		case 'power-bullet':
-			map.ability = POWER;
+			map.ability = bulletMode.POWER;
+
+			map.powerBulletElement.style.color = 'red';
+			map.powerBulletElement.style.textShadow = 'red 0 0 2.5px, red 0 0 2.5px';
+
+			map.spreadBulletElement.style.color = 'white';
+			map.spreadBulletElement.style.textShadow = 'white 0 0 2.5px, white 0 0 2.5px';
 			break;
 		case 'spread-bullet':
-			map.ability = SPREAD;
+			map.ability = bulletMode.SPREAD;
+
+			map.powerBulletElement.style.color = 'white';
+			map.powerBulletElement.style.textShadow = 'white 0 0 2.5px, white 0 0 2.5px';
+
+			map.spreadBulletElement.style.color = 'red';
+			map.spreadBulletElement.style.textShadow = 'red 0 0 2.5px, red 0 0 2.5px';
 			break;
 	}
 });

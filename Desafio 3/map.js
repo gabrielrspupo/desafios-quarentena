@@ -47,6 +47,8 @@ class Map {
 		this.powerBulletElement = document.createElement('div');
 		this.powerBulletElement.id = 'power-bullet';
 		this.powerBulletElement.innerHTML = `POWER`;
+		this.powerBulletElement.style.color = 'red';
+		this.powerBulletElement.style.textShadow = 'red 0 0 2.5px, red 0 0 2.5px';
 		this.abilityElement.appendChild(this.powerBulletElement);
 
 		this.spreadBulletElement = document.createElement('div');
