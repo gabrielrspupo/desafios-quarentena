@@ -24,9 +24,9 @@ class Asteroid extends MovableEntity {
 
 		let velocityRate = -0.001;
 
-		if (size >= MAX_ASTEROID_SIZE - 5) 
-			velocityRate = -0.0005
-		if (size <= MIN_ASTEROID_SIZE + 5)
+		if (Asteroid.isBigAsteroid(size)) 
+			velocityRate = -0.0005;
+		if (Asteroid.isFastAsteroid(size))
 			velocityRate = -0.0015;
 
 
@@ -49,9 +49,9 @@ class Asteroid extends MovableEntity {
 		const asteroidImageIndex = Math.floor(Math.random() * 3) + 1;
 		this.rootElement.style.backgroundImage = `url('assets/asteroid-${asteroidImageIndex}.svg')`;
 		this.rootElement.style.backgroundSize = size + 'px';
-		if (size >= MAX_ASTEROID_SIZE - 5)
+		if (Asteroid.isBigAsteroid(size))
 			this.rootElement.style.filter = 'brightness(50%) sepia(100) saturate(100) hue-rotate(25deg)';
-		if (size <= MIN_ASTEROID_SIZE + 5) 
+		if (Asteroid.isFastAsteroid(size)) 
 			this.rootElement.style.filter = 'brightness(50%) sepia(100)';
 	}
 
@@ -83,6 +83,14 @@ class Asteroid extends MovableEntity {
 		return (Math.random() - 0.5) * 2 * MAX_ASTEROID_ROTATION_SPEED;
 	}
 
+	static isBigAsteroid(size) {
+		return size >= MAX_ASTEROID_SIZE - 5;
+	}
+
+	static isFastAsteroid(size) {
+		return size <= MIN_ASTEROID_SIZE + 5;
+	}
+
 	/**
 	* Calculates the max life of the asteroid based on it's size. The larger the asteroid,
 	* the larger it's life.
@@ -107,9 +115,14 @@ class Asteroid extends MovableEntity {
 		// https://www.geeksforgeeks.org/instanceof-operator-in-javascript/
 		if (!(object instanceof Bullet)) return;
 
-		if (object.mode == 0) this.life --;
-		else if (object.mode == 1) this.life -= 3;
-		else if (object.mode == 2) this.life -= 0.5;
+		switch (object.mode) {
+			case bulletMode.NORMAL:
+				this.life --; break;
+			case bulletMode.POWER:
+				this.life -= 3; break;
+			case bulletMode.SPREAD:
+				this.life -= 0.5; break;
+		} 
 
 		if (this.life <= 0) {
 			this.mapInstance.removeEntity(this);
