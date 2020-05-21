@@ -25,7 +25,7 @@ class Map {
 
 		let HUD = document.createElement('div');
 		HUD.style.textAlign = 'center';
-		HUD.style.width = '30vw';
+		HUD.style.width = '40vw';
 		rootElement.appendChild(HUD);
 		
 		// Current score
