@@ -61,9 +61,9 @@ class Player extends MovableEntity {
 	* Instantiates a bullet in front of the player.
 	*/
 	shoot (mode) {
-		if (mode == 2) new Bullet (this.containerElement, this.mapInstance, this.direction.rotate(20), mode);
-		new Bullet (this.containerElement, this.mapInstance, this.direction, mode);
-		if (mode == 2) new Bullet (this.containerElement, this.mapInstance, this.direction.rotate(-20), mode);
+		if (mode == 2) new Bullet (this.containerElement, this.mapInstance, this.position, this.direction.rotate(20), mode);
+		new Bullet (this.containerElement, this.mapInstance, this.position, this.direction, mode);
+		if (mode == 2) new Bullet (this.containerElement, this.mapInstance, this.position, this.direction.rotate(-20), mode);
 	}
 
 	/**

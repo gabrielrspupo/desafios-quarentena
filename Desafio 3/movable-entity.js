@@ -90,10 +90,7 @@ class MovableEntity {
 		let angle = Math.atan(this.direction.y / this.direction.x) + Math.PI;
 		if (this.direction.x < 0) angle -= Math.PI;
 
-		
-
 		let diff = new Vector( -Math.cos(angle) , -Math.sin(angle) );
-		console.log(this.velocity.x)
 		this.position = this.position.add(diff);
 	}
 
