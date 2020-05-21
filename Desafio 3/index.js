@@ -22,6 +22,12 @@ function frame () {
 	if (pressedKeys['a'] || pressedKeys['ArrowLeft']) player.turn(-1);
 	if (pressedKeys['d'] || pressedKeys['ArrowRight']) player.turn(1);
 	if (pressedKeys['w'] || pressedKeys['ArrowUp']) player.move();
+
+	// tell player if power bullet is ready
+	if (!powerBulletLoading() && !playerKnows) {
+		map.powerBulletElement.appendChild(readyText);
+		playerKnows = true;
+	}
 }
 
 // This is a dictionary that will hold the keys that are being held down at the time.
@@ -34,19 +40,32 @@ const bulletMode = Object.freeze({
 	SPREAD: 2
 });
 
-const cooldown = 3000;
-let lastClick = 0;
+const cooldown = 3000;			// power bullet cooldown
+let lastPowerInvoke = 0;		// last time power bullet was invoked
+
+// power bullet 'Ready!' display
+let playerKnows = false;
+let readyText = document.createElement('div');
+readyText.innerHTML = `Ready!`;
+readyText.style.fontSize = '10px';
+readyText.style.color = 'green';
+readyText.style.textShadow = 'green 0 0 2.5px, green 0 0 2.5px';
+
+function powerBulletLoading() {
+	return lastPowerInvoke >= (Date.now() - cooldown);
+}
 
 // This function will run every time the player presses a key
 document.body.addEventListener('keydown', event => {
 	// if that key is the spacebar, the player will shoot.
 	if (event.key === ' ' && !pressedKeys[' ']) player.shoot(bulletMode.NORMAL);
-	if (event.key === 'z' && !pressedKeys['z']) {
+	// if that key is E, the player shoots a special bullet
+	if (event.key === 'e' && !pressedKeys['e']) {
 		if (map.ability == bulletMode.POWER) {	// wait 3 seconds before shooting power bullet
-			let now = Date.now() - cooldown;
-			if (lastClick >= now)	return;
-
-			lastClick = Date.now();
+			if (powerBulletLoading())	return;
+			playerKnows = false;
+			map.powerBulletElement.removeChild(readyText);
+			lastPowerInvoke = Date.now();
 		}
 
 		player.shoot(map.ability);
