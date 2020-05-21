@@ -1,12 +1,12 @@
 # Desafio #3 - Asteroids
 
 ## Instruções do jogo (neste fork)
-W (ou Seta Para Cima): impulsionar nave
-AD (ou Seta Para Esquerda/Seta para Direita): girar nave
-Espaço: atirar balas normais
-E: atirar balas especiais
-Click: selecionar bala especial no HUD
-
+W (ou Seta Para Cima): impulsionar nave <br>
+A/D (ou Seta Para Esquerda/Seta para Direita): girar nave <br>
+Espaço: atirar balas normais <br>
+E: atirar balas especiais <br>
+Click: selecionar bala especial no HUD <br>
+ <br>
 A bala especial **Power Bullet** tem um cooldown de 3 segundos.
 
 <img src='https://i.imgur.com/CUPoqY4.png' >
