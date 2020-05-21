@@ -162,7 +162,10 @@ class Map {
 			}
 
 			// if the entity is too far from the center, delete it to conserve processing power.
-			if (entity1.distanceFromCenter() > 300) entity1.delete();
+			if (entity1.distanceFromCenter() > 300) {
+				entity1.delete();			// remove it from DOM
+				this.removeEntity(entity1);	// remove it from movable entities array
+			}
 		}
 
 		// Once the physics has been calculated, and collisions have been checked,
