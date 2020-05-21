@@ -86,6 +86,9 @@ class MovableEntity {
 		this.rootElement.style.transform = `translate(-50%, -50%) rotate(${angle}rad)`;
 	}
 
+	/**
+	* This method is to update the element's position depending on its rotation angle
+	*/
 	setPosition () {
 		let angle = Math.atan(this.direction.y / this.direction.x) + Math.PI;
 		if (this.direction.x < 0) angle -= Math.PI;

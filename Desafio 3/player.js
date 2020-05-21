@@ -53,6 +53,9 @@ class Player extends MovableEntity {
 		this.setDirection(this.direction.rotate(degrees));
 	}
 
+	/**
+	* Will move the player's model
+	*/
 	move () {
 		this.setPosition();
 	}
@@ -61,6 +64,7 @@ class Player extends MovableEntity {
 	* Instantiates a bullet in front of the player.
 	*/
 	shoot (mode) {
+		// Instantiate more bullets if bullet is in spread mode
 		if (mode == bulletMode.SPREAD) new Bullet (this.containerElement, this.mapInstance, this.position, this.direction.rotate(20), mode);
 		new Bullet (this.containerElement, this.mapInstance, this.position, this.direction, mode);
 		if (mode == bulletMode.SPREAD) new Bullet (this.containerElement, this.mapInstance, this.position, this.direction.rotate(-20), mode);

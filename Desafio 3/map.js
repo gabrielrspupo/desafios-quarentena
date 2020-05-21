@@ -23,6 +23,7 @@ class Map {
 		// This is to allow for the map to set it's difficulty based on the game's time length
 		this.gameStartTimestamp = Date.now();
 
+		// Creates HUD element
 		let HUD = document.createElement('div');
 		HUD.style.textAlign = 'center';
 		HUD.style.width = '40vw';
@@ -34,11 +35,13 @@ class Map {
 		this.scoreElement.innerHTML = `ABATES: ${this.score}`;
 		HUD.appendChild(this.scoreElement);
 
+		// Current time since game start
 		this.time = 0;
 		this.timerElement = document.createElement('div');
 		this.timerElement.innerHTML = `TEMPO: ${this.time}`;
 		HUD.appendChild(this.timerElement);
 
+		// Ability menu
 		this.ability = 1;
 		this.abilityElement = document.createElement('div');
 		this.abilityElement.style.display = 'flex';

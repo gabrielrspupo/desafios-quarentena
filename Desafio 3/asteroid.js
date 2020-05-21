@@ -24,6 +24,7 @@ class Asteroid extends MovableEntity {
 
 		let velocityRate = -0.001;
 
+		// change asteroid velocity depending on its size
 		if (Asteroid.isBigAsteroid(size)) 
 			velocityRate = -0.0005;
 		if (Asteroid.isFastAsteroid(size))
@@ -49,6 +50,8 @@ class Asteroid extends MovableEntity {
 		const asteroidImageIndex = Math.floor(Math.random() * 3) + 1;
 		this.rootElement.style.backgroundImage = `url('assets/asteroid-${asteroidImageIndex}.svg')`;
 		this.rootElement.style.backgroundSize = size + 'px';
+
+		// change asteroid color depending on its ability
 		if (Asteroid.isBigAsteroid(size))
 			this.rootElement.style.filter = 'brightness(50%) sepia(100) saturate(100) hue-rotate(25deg)';
 		if (Asteroid.isFastAsteroid(size)) 

@@ -38,6 +38,8 @@ class Bullet extends MovableEntity {
 		// Assigns the bullet's image to it's element
 		this.rootElement.style.backgroundImage = "url('assets/bullet.svg')";
 		this.rootElement.style.backgroundSize = this.size + 'px';
+
+		// change bullet color depending on its ability
 		if (this.mode == bulletMode.POWER)
 			this.rootElement.style.filter = 'brightness(50%) sepia(100) saturate(100) hue-rotate(25deg)';
 	}

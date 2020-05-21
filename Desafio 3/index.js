@@ -42,13 +42,13 @@ document.body.addEventListener('keydown', event => {
 	// if that key is the spacebar, the player will shoot.
 	if (event.key === ' ' && !pressedKeys[' ']) player.shoot(bulletMode.NORMAL);
 	if (event.key === 'z' && !pressedKeys['z']) {
-		if (map.ability == bulletMode.POWER) {
+		if (map.ability == bulletMode.POWER) {	// wait 3 seconds before shooting power bullet
 			let now = Date.now() - cooldown;
 			if (lastClick >= now)	return;
 
 			lastClick = Date.now();
 		}
-		
+
 		player.shoot(map.ability);
 	}
 
@@ -62,9 +62,10 @@ document.body.addEventListener('keyup', event => {
 	delete pressedKeys[event.key];
 });
 
+// This function will run every time the player clicks
 document.body.addEventListener('click', event => {
 	switch (event.target.id) {
-		case 'power-bullet':
+		case 'power-bullet':	// select power bullet in HUD
 			map.ability = bulletMode.POWER;
 
 			map.powerBulletElement.style.color = 'red';
@@ -73,7 +74,7 @@ document.body.addEventListener('click', event => {
 			map.spreadBulletElement.style.color = 'white';
 			map.spreadBulletElement.style.textShadow = 'white 0 0 2.5px, white 0 0 2.5px';
 			break;
-		case 'spread-bullet':
+		case 'spread-bullet':	// select spread bullet in HUD
 			map.ability = bulletMode.SPREAD;
 
 			map.powerBulletElement.style.color = 'white';
