@@ -86,6 +86,17 @@ class MovableEntity {
 		this.rootElement.style.transform = `translate(-50%, -50%) rotate(${angle}rad)`;
 	}
 
+	setPosition () {
+		let angle = Math.atan(this.direction.y / this.direction.x) + Math.PI;
+		if (this.direction.x < 0) angle -= Math.PI;
+
+		
+
+		let diff = new Vector( -Math.cos(angle) , -Math.sin(angle) );
+		console.log(this.velocity.x)
+		this.position = this.position.add(diff);
+	}
+
 	/**
 	* This function should be called every game frame to update the object's position
 	* according to it's velocity.

@@ -53,6 +53,10 @@ class Player extends MovableEntity {
 		this.setDirection(this.direction.rotate(degrees));
 	}
 
+	move () {
+		this.setPosition();
+	}
+
 	/**
 	* Instantiates a bullet in front of the player.
 	*/

@@ -21,6 +21,7 @@ function frame () {
 	// if the player is pressing one of the keys, call the turn function
 	if (pressedKeys['a'] || pressedKeys['ArrowLeft']) player.turn(-1);
 	if (pressedKeys['d'] || pressedKeys['ArrowRight']) player.turn(1);
+	if (pressedKeys['w'] || pressedKeys['ArrowUp']) player.move();
 }
 
 // This is a dictionary that will hold the keys that are being held down at the time.
@@ -36,7 +37,6 @@ document.body.addEventListener('keydown', event => {
 	// if that key is the spacebar, the player will shoot.
 	if (event.key === ' ' && !pressedKeys[' ']) player.shoot(NORMAL);
 	if (event.key === 'z' && !pressedKeys['z']) player.shoot(map.ability);
-	if (event.key === 'x' && !pressedKeys['x']) player.shoot(SPREAD);
 
 	// add the pressed key to the pressedKey dictionary
 	pressedKeys[event.key] = true;
