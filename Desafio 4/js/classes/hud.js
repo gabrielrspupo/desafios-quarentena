@@ -1,16 +1,27 @@
 const HUD_SIZE = new Vector(400, 75);
 const HUD_POSITION = new Vector(0, 250);
 
+/**
+ * This class defines the HUD. A HUD is a visual representation of current game statistics.
+ * It holds the current player score and game level.
+ */
 class HUD extends Entity {
-
+    /**
+	* Will hold the HUD instance
+	* @type { HUD | null }
+	*/
     static instance = null;
 
+    /**
+	* @argument { HTMLDivElement } containerElement The HTML element in which the HUD should be created
+	*/
     constructor (containerElement) {
         super(containerElement, HUD_SIZE, HUD_POSITION);
 
+        // assign the game stats from appropriate objects into the HUD elements
         this.score = Player.instance.score;
         this.level = GameMap.instance.level;
-        this.latest = true;
+        this.latest = true; // is the HUD on the latest version?
 
         this.rootElement.style.display = 'flex';
         this.rootElement.style.justifyContent = 'space-evenly';
@@ -46,6 +57,10 @@ class HUD extends Entity {
         return this._score;
     }
 
+    /**
+     * Updates the game HUD, with the latest statistics.
+     * To avoid the reconstruction of the DOM every frame (and thus enhance performance), only updates when flag is unset.
+     */
     update () {
         if (!this.latest) {
             this.scoreElement.innerHTML = `Score<br />${this.score}`;
