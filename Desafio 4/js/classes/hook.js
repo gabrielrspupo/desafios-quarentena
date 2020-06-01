@@ -150,6 +150,17 @@ class Hook extends MovableEntity {
 		this.velocity = this.direction.scale(THROW_SPEED);
 	}
 
+	pullLoadedHook () {
+		// if an object was hooked, use it's speed multiplier
+		const speed = BASE_HOOK_PULL_SPEED * this.hookedObject.calculateHookSpeedMultiplier();
+		this.velocity = this.direction.scale(-speed);
+	}
+
+	pullEmptyHook () {
+		// if no object was hooked, use the default value
+		this.velocity = this.direction.scale(-EMPTY_HOOK_SPEED);
+	}
+
 	/**
 	* Will start to pull the hook back
 	*/
@@ -160,14 +171,8 @@ class Hook extends MovableEntity {
 		// Updates the hook state.
 		this.state = 'pulling';
 
-		if (this.hookedObject) {
-			// if an object was hooked, use it's speed multiplier
-			const speed = BASE_HOOK_PULL_SPEED * this.hookedObject.calculateHookSpeedMultiplier();
-			this.velocity = this.direction.scale(-speed);
-		} else {
-			// if no object was hooked, use the default value
-			this.velocity = this.direction.scale(-EMPTY_HOOK_SPEED);
-		}
+		if (this.hookedObject) this.pullLoadedHook();
+		else this.pullEmptyHook();
 	}
 
 	/**

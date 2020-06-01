@@ -7,6 +7,7 @@ const player = new Player(movableEntityContainer);
 // Fetching the HUD container
 const gameHUDContainer = document.getElementById('game-hud');
 
+const dynamite = new Dynamite(new document.createElement('div'));
 const hud = new HUD(gameHUDContainer);
 
 // This is the game frame function. It is responsible for updating everything in the game.
@@ -19,6 +20,7 @@ function frame () {
 document.body.addEventListener('keydown', event => {
 	// if that key is the spacebar, the player will try to throw it's hook.
 	if (event.key === ' ') player.throwHook();
+	if (event.key === 'd') dynamite.explode();
 });
 
 // Registers the frame function to run at every frame.
