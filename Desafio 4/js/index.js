@@ -4,9 +4,15 @@ const movableEntityContainer = document.getElementById('movable-entity-container
 const map = new GameMap(movableEntityContainer);
 const player = new Player(movableEntityContainer);
 
+// Fetching the HUD container
+const gameHUDContainer = document.getElementById('game-hud');
+
+const hud = new HUD(gameHUDContainer);
+
 // This is the game frame function. It is responsible for updating everything in the game.
 function frame () {
 	map.frame();
+	hud.update();
 }
 
 // This function will run every time the player presses a key

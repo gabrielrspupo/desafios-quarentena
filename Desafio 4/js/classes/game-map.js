@@ -59,7 +59,8 @@ class GameMap extends Entity {
 
 	nextLevel () {
 		this.level ++;
-		console.log('next level');
+		//console.log('next level');
+		HUD.instance.level = this.level;
 		// Delete all remaining gold and rock elements
 		Gold.allGoldElements.forEach(gold => gold.delete());
 		Rock.allRockElements.forEach(rock => rock.delete());
