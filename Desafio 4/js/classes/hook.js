@@ -214,6 +214,8 @@ class Hook extends MovableEntity {
 			if (this.hookedObject instanceof Gold) {
 				// Gold was brought back! call the gold delivery callback.
 				this.onGoldDelivered(this.hookedObject);
+			} else if (this.hookedObject instanceof Surprise) {
+				this.hookedObject.applyRandomEffect();
 			}
 			// removes forever the object that was pulled.
 			this.hookedObject.delete();
@@ -227,7 +229,7 @@ class Hook extends MovableEntity {
 	* allow for behavior extension.
 	*/
 	collided (object) {
-		if (object instanceof Gold || object instanceof Rock) {
+		if (object instanceof Gold || object instanceof Rock || object instanceof Surprise) {
 			this.hookedObject = object;
 			this.hookedObject.offset = this.hookedObject.position.subtract(this.position);
 			this.pullBack();

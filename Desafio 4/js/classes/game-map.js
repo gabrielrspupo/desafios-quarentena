@@ -3,6 +3,7 @@ const FLOOR_HEIGHT = -100;
 
 const BASE_SCORE_FOR_NEXT_LEVEL = 5;
 const BASE_NUMBER_OF_ROCKS = 2;
+const MAX_NUMBER_OF_SURPRISES = 3;
 
 /**
 * This is a class declaration
@@ -55,6 +56,10 @@ class GameMap extends Entity {
 		for (let i = 0; i < this.calculateNumberOfRocks(); i ++) {
 			this.generateItem('rock');
 		}
+
+		for (let i = 0; i < this.calculateNumberOfSurprises(); i ++) {
+			this.generateItem('surprise');
+		}
 	}
 
 	nextLevel () {
@@ -63,6 +68,7 @@ class GameMap extends Entity {
 		// Delete all remaining gold and rock elements
 		Gold.allGoldElements.forEach(gold => gold.delete());
 		Rock.allRockElements.forEach(rock => rock.delete());
+		Surprise.allSurpriseElements.forEach(sack => sack.delete());
 		this.initializeLevel();
 	}
 
@@ -88,6 +94,10 @@ class GameMap extends Entity {
 	*/
 	calculateNumberOfRocks () {
 		return BASE_NUMBER_OF_ROCKS + this.level * 3;
+	}
+
+	calculateNumberOfSurprises () {
+		return Math.min(MAX_NUMBER_OF_SURPRISES, this.level);
 	}
 
 	/**
@@ -133,6 +143,7 @@ class GameMap extends Entity {
 		let element;
 		if (itemType === 'rock') element = new Rock(this.containerElement, Vector.zero);
 		else if (itemType === 'gold') element = new Gold(this.containerElement, Vector.zero);
+		else if (itemType === 'surprise') element = new Surprise(this.containerElement, Vector.zero);
 		else throw new Error(`Invalid item type '${itemType}'`);
 
 		// Checks if the new element is colliding with anything on the map
@@ -141,6 +152,8 @@ class GameMap extends Entity {
 			if (isCollidingWithRocks) return true;
 			const isCollidingWithGold = Gold.allGoldElements.some(gold => Entity.didEntitiesColide(gold, element));
 			if (isCollidingWithGold) return true;
+			const isCollidingWithSurpriseSack = Surprise.allSurpriseElements.some(sack => Entity.didEntitiesColide(sack, element));
+			if (isCollidingWithSurpriseSack) return true;
 			return false;
 		}
 
@@ -173,6 +186,10 @@ class GameMap extends Entity {
 		}
 	}
 
+	fetchAllGroundEntities () {
+		return Rock.allRockElements.concat(Gold.allGoldElements.concat(Surprise.allSurpriseElements));
+	}
+
 	/*
 	* This function should be executed every game frame. It will call all of it's
 	* movableObjects's frame functions (which will update their physics), and
@@ -190,9 +207,9 @@ class GameMap extends Entity {
 		// No need to check for collision if the hook is being pulled back
 		if (hook.status === 'pulling') return;
 
-		const rockAndGoldEntities = Rock.allRockElements.concat(Gold.allGoldElements);
+		const groundEntities = this.fetchAllGroundEntities();
 
-		rockAndGoldEntities.forEach(entity => {
+		groundEntities.forEach(entity => {
 			this.verifyForCollision(hook, entity);
 		});
 
