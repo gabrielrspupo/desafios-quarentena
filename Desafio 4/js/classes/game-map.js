@@ -4,6 +4,7 @@ const FLOOR_HEIGHT = -100;
 const BASE_SCORE_FOR_NEXT_LEVEL = 5;
 const BASE_NUMBER_OF_ROCKS = 2;
 const MAX_NUMBER_OF_SURPRISES = 3;
+const BASE_TIME = 20;
 
 /**
 * This is a class declaration
@@ -42,6 +43,10 @@ class GameMap extends Entity {
 
 		this.initializeLevel();
 
+		//this.time = BASE_TIME + BASE_SCORE_FOR_NEXT_LEVEL;
+		this.calculateCurrentLevelTime();
+		this.isGameOver = false;
+
 		GameMap.instance = this;
 	}
 
@@ -70,6 +75,12 @@ class GameMap extends Entity {
 		Rock.allRockElements.forEach(rock => rock.delete());
 		Surprise.allSurpriseElements.forEach(sack => sack.delete());
 		this.initializeLevel();
+		this.calculateCurrentLevelTime();
+	}
+
+	calculateCurrentLevelTime () {
+		this.levelStartTimestamp = Date.now();
+		this.time = BASE_TIME + this.calculateMinimumScore(this.level) - (this.level * 2);
 	}
 
 	/**
@@ -177,12 +188,27 @@ class GameMap extends Entity {
 		} while (isElementCollidingWithAnything());
 	}
 
+	clockTick () {
+		HUD.instance.time = this.time - Math.floor((Date.now() - this.levelStartTimestamp) / 1000);
+		this.verifyIfLevelIsOver();
+	}
+
+	gameOver () {
+		alert("Você perdeu");
+		window.location.reload();
+	}
+
 	/**
 	* If the player has a high enough score, generate the next level.
 	*/
 	verifyIfLevelIsOver () {
 		if (Player.instance.score >= this.calculateMinimumScore(this.level)) {
 			this.nextLevel();
+		}
+
+		if (HUD.instance.time <= 0 && !this.isGameOver) {
+			this.isGameOver = true;
+			this.gameOver();
 		}
 	}
 
@@ -199,6 +225,8 @@ class GameMap extends Entity {
 	* allow for behavior extension.
 	*/
 	frame () {
+		this.clockTick();
+
 		// Call the frame function on all movableEntities
 		MovableEntity.runAllFrameFunctions();
 

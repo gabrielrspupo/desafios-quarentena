@@ -22,6 +22,7 @@ class HUD extends Entity {
         this.score = Player.instance.score;
         this.level = GameMap.instance.level;
         this.dynamite = Dynamite.instance.amount;
+        this.time = GameMap.instance.time;
         this.latest = true; // is the HUD on the latest version?
 
         this.rootElement.style.display = 'flex';
@@ -37,9 +38,13 @@ class HUD extends Entity {
         this.dynamiteElement = document.createElement('div');
         this.dynamiteElement.innerHTML = `Dynamites<br />${this.dynamite}`;
 
+        this.timeElement = document.createElement('div');
+        this.timeElement.innerHTML = `Time<br />${this.time}`;
+
         this.rootElement.appendChild(this.scoreElement);
         this.rootElement.appendChild(this.levelElement);
         this.rootElement.appendChild(this.dynamiteElement);
+        this.rootElement.appendChild(this.timeElement);
 
         HUD.instance = this;
     }
@@ -71,6 +76,15 @@ class HUD extends Entity {
         return this._dynamite;
     }
 
+    set time (newTime) {
+        this._time = newTime;
+        this.latest = false;
+    }
+
+    get time () {
+        return this._time;
+    }
+
     /**
      * Updates the game HUD, with the latest statistics.
      * To avoid the reconstruction of the DOM every frame (and thus enhance performance), only updates when flag is unset.
@@ -80,6 +94,7 @@ class HUD extends Entity {
             this.scoreElement.innerHTML = `Score<br />${this.score}`;
             this.levelElement.innerHTML = `Level<br />${this.level}`;
             this.dynamiteElement.innerHTML = `Dynamites<br />${this.dynamite}`;
+            this.timeElement.innerHTML = `Time<br />${this.time}`;
             this.latest = true;
         }
     }

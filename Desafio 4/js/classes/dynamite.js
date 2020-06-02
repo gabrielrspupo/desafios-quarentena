@@ -1,4 +1,4 @@
-const DYNAMITE_AMOUNT = 3;
+const DYNAMITE_AMOUNT = 1;
 const DYNAMITE_SIZE = 20;
 
 class Dynamite extends Entity {
