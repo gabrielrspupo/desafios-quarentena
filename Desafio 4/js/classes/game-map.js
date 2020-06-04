@@ -235,10 +235,14 @@ class GameMap extends Entity {
 		// No need to check for collision if the hook is being pulled back
 		if (hook.status === 'pulling') return;
 
+		const dynamite = Dynamite.instance;
+
 		const groundEntities = this.fetchAllGroundEntities();
 
 		groundEntities.forEach(entity => {
 			this.verifyForCollision(hook, entity);
+			if (dynamite !== null)
+				this.verifyForCollision(dynamite, entity);
 		});
 
 		// pull back the hook if it's gone too far

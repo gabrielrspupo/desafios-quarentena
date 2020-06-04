@@ -21,7 +21,7 @@ class HUD extends Entity {
         // assign the game stats from appropriate objects into the HUD elements
         this.score = Player.instance.score;
         this.level = GameMap.instance.level;
-        this.dynamite = Dynamite.instance.amount;
+        this.dynamite = Player.instance.dynamite;
         this.time = GameMap.instance.time;
         this.latest = true; // is the HUD on the latest version?
 

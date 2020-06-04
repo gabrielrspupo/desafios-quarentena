@@ -1,26 +1,50 @@
-const DYNAMITE_AMOUNT = 1;
-const DYNAMITE_SIZE = 20;
+const DYNAMITE_SIZE = 70;
+const DYNAMITE_THROWING_SPEED = 0.8;
+const DYNAMITE_ROTATION_SPEED = 0.03;
 
-class Dynamite extends Entity {
+class Dynamite extends MovableEntity {
 
     static instance = null;
 
-    constructor (containerElement) {
+    constructor (
+        containerElement,
+        initialPosition
+    ) {
 
-        super(containerElement, new Vector(1, 1).scale(DYNAMITE_SIZE));
+        super(containerElement, new Vector(1, 1).scale(DYNAMITE_SIZE), initialPosition);
 
-        this.amount = DYNAMITE_AMOUNT;
+        this.rootElement.style.backgroundImage = "url('assets/dynamite.svg')";
+
+        this.hook = Hook.hookElement;
 
         Dynamite.instance = this;
     }
 
-    explode () {
-        if (Hook.hookElement.state !== 'pulling' || this.amount === 0) return;
+    explode (object) {
+        if (this.hook.state !== 'pulling' || this.amount === 0) return;
 
-        Hook.hookElement.hookedObject.delete();
-        Hook.hookElement.hookedObject = null;
-        Hook.hookElement.pullEmptyHook();
+        object.delete();
+        object = null;
+        this.hook.pullEmptyHook();
 
-        HUD.instance.dynamite = --this.amount;
+        HUD.instance.dynamite = --Player.instance.dynamite;
+        
+        this.delete();
+        Dynamite.instance = null;
+    }
+
+    collided (object) {
+        if (object === this.hook.hookedObject)
+            this.explode(this.hook.hookedObject);
+    }
+
+    throw () {
+        this.velocity = this.hook.direction.scale(DYNAMITE_THROWING_SPEED);
+    }
+
+    frame () {
+        super.frame();
+
+        this.turn(DYNAMITE_ROTATION_SPEED);
     }
 }

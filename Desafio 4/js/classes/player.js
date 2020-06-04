@@ -1,4 +1,6 @@
 const PLAYER_SIZE = new Vector(50, 50);
+const PLAYER_POSITION = new Vector(0, -120);
+const DYNAMITE_INITIAL_AMOUNT = 1;
 
 /**
 * This is a class declaration
@@ -29,7 +31,7 @@ class Player extends Entity {
 		// The `super` function will call the constructor of the parent class.
 		// If you'd like to know more about class inheritance in javascript, see this link
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Sub_classing_with_extends
-		super(containerElement, PLAYER_SIZE, new Vector(0, -120));
+		super(containerElement, PLAYER_SIZE, PLAYER_POSITION);
 
 		// Assigns the player's image to it's element
 		this.rootElement.style.backgroundImage = "url('assets/player.svg')";
@@ -44,6 +46,8 @@ class Player extends Entity {
 
 		// Will hold the player's total score.
 		this.score = 0;
+
+		this.dynamite = DYNAMITE_INITIAL_AMOUNT;
 
 		Player.instance = this;
 	}
@@ -61,5 +65,10 @@ class Player extends Entity {
 
 	throwHook () {
 		this.hook.throw();
+	}
+
+	throwDynamite () {
+		if (this.hook.state === 'pulling' && this.dynamite > 0)
+			new Dynamite(this.containerElement, PLAYER_POSITION).throw();
 	}
 }
