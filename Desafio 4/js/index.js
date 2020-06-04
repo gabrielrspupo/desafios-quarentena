@@ -18,6 +18,8 @@ function frame () {
 document.body.addEventListener('keydown', event => {
 	// if that key is the spacebar, the player will try to throw it's hook.
 	if (event.key === ' ') player.throwHook();
+
+	// if that key is D, the player will try to throw a dynamite.
 	if (event.key === 'd') player.throwDynamite();
 });
 

@@ -67,6 +67,9 @@ class Player extends Entity {
 		this.hook.throw();
 	}
 
+	/**
+	 * Throws dynamite at hooked object if hook is pulling one, and if player has a dynamite.
+	 */
 	throwDynamite () {
 		if (this.hook.state === 'pulling' && this.dynamite > 0)
 			new Dynamite(this.containerElement, PLAYER_POSITION).throw();

@@ -1,8 +1,19 @@
 const SURPRISE_SACK_SIZE = 40;
-
+/**
+ * This class defines the surprise sacks behavior.
+ */
 class Surprise extends Entity {
+    /**
+     * Store every surprise sacks instantiated in the current level.
+     * @type { Surprise[] }
+     */
     static allSurpriseElements = [];
 
+    /**
+     * 
+     * @param {HTMLDivElement} containerElement The HTML element in which the sack must be created
+     * @param {Vector} initialPosition The initial position of the sack in the container
+     */
     constructor (
         containerElement,
 		initialPosition,
@@ -11,13 +22,21 @@ class Surprise extends Entity {
 
         this.rootElement.style.backgroundImage = "url('assets/surprise.svg')";
 
+        // when new sack is created push to the Surprise elements array
         Surprise.allSurpriseElements.push(this);
     }
 
+    /**
+     * The speed in which the sack will be pulled by the hook
+     * @returns {number} A constant multiplyer
+     */
     calculateHookSpeedMultiplier () {
         return 0.95;
     }
 
+    /**
+     * Draw a random effect and apply in the game.
+     */
     applyRandomEffect () {
         let roll = Math.random();
         if (roll < 0.5) {
@@ -33,7 +52,7 @@ class Surprise extends Entity {
             setTimeout(() => {
                 HUD.instance.scoreElement.style.color = 'black';
             }, 300);
-            GameMap.instance.verifyIfLevelIsOver();
+            GameMap.instance.verifyIfLevelIsOver(); // check if this score change terminates level
         }
     }
 

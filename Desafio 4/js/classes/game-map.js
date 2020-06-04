@@ -43,7 +43,7 @@ class GameMap extends Entity {
 
 		this.initializeLevel();
 
-		//this.time = BASE_TIME + BASE_SCORE_FOR_NEXT_LEVEL;
+		// Initialize losing conditions
 		this.calculateCurrentLevelTime();
 		this.isGameOver = false;
 
@@ -51,7 +51,7 @@ class GameMap extends Entity {
 	}
 
 	/**
-	* Will initialize the whole level, creating all golds and rocks
+	* Will initialize the whole level, creating all golds and rocks and surprise sacks
 	*/
 	initializeLevel () {
 		while (this.getCurrentGoldScoreInMap() < this.calculateTotalGoldScore()) {
@@ -78,6 +78,9 @@ class GameMap extends Entity {
 		this.calculateCurrentLevelTime();
 	}
 
+	/**
+	 * calculates the time remaining for the current level.
+	 */
 	calculateCurrentLevelTime () {
 		this.levelStartTimestamp = Date.now();
 		this.time = BASE_TIME + this.calculateMinimumScore(this.level) - (this.level * 2);
@@ -188,13 +191,19 @@ class GameMap extends Entity {
 		} while (isElementCollidingWithAnything());
 	}
 
+	/**
+	 * Decrease timer wvery frame.
+	 */
 	clockTick () {
 		HUD.instance.time = this.time - Math.floor((Date.now() - this.levelStartTimestamp) / 1000);
 		this.verifyIfLevelIsOver();
 	}
 
+	/**
+	 * Ends game when time is up.
+	 */
 	gameOver () {
-		alert("Você perdeu");
+		alert("O tempo acabou e você perdeu!");
 		window.location.reload();
 	}
 
@@ -241,7 +250,7 @@ class GameMap extends Entity {
 
 		groundEntities.forEach(entity => {
 			this.verifyForCollision(hook, entity);
-			if (dynamite !== null)
+			if (dynamite !== null)	// if a dynamite was thrown, check if it hits an object
 				this.verifyForCollision(dynamite, entity);
 		});
 
