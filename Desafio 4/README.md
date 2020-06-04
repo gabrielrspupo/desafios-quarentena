@@ -1,7 +1,7 @@
 # Desafio #4 - Gold Miner
 
 ## Controles
-Espaço - lança o gancho
+Espaço - lança o gancho<br />
 D - lança dinamite para explodir objetos
 
 <img src='https://i.imgur.com/wdbDznm.png'>
