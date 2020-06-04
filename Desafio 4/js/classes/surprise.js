@@ -20,11 +20,19 @@ class Surprise extends Entity {
 
     applyRandomEffect () {
         let roll = Math.random();
-        if (roll < 0.4) {
-            HUD.instance.dynamite = ++ Dynamite.instance.amount;    // increase dynamite amount
+        if (roll < 0.5) {
+            HUD.instance.dynamite = ++ Player.instance.dynamite;    // increase dynamite amount
+            HUD.instance.dynamiteElement.style.color = 'red';
+            setTimeout(() => {
+                HUD.instance.dynamiteElement.style.color = 'black';
+            }, 300);
         } else {
             Player.instance.score += 3;     // increase player score in 3 units
             HUD.instance.score = Player.instance.score; 	// update score stat on HUD
+            HUD.instance.scoreElement.style.color = 'red';
+            setTimeout(() => {
+                HUD.instance.scoreElement.style.color = 'black';
+            }, 300);
             GameMap.instance.verifyIfLevelIsOver();
         }
     }
