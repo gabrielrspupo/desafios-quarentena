@@ -224,8 +224,8 @@ let opponent;
 
 // wait until DOM is loaded to catch health bar element
 document.addEventListener("DOMContentLoaded", function(event) { 
-  player = new Fighter('Simões', ['human', 'assembly'], 280, document.getElementById('player-health'), playerAttacks, playerWeaknesses, 0.25, true);
-  opponent = new Fighter('Mello', ['human', 'gcc'], 380, document.getElementById('opponent-health'), opponentAttacks, opponentWeaknesses, 0.075, false);
+  player = new Fighter('51M-4O', ['robot', 'assembly'], 280, document.getElementById('player-health'), playerAttacks, playerWeaknesses, 0.25, true);
+  opponent = new Fighter('Doutor C', ['human', 'gcc'], 380, document.getElementById('opponent-health'), opponentAttacks, opponentWeaknesses, 0.075, false);
   
   player.versus = opponent;
   opponent.versus = player;
@@ -248,8 +248,8 @@ function nextStage () {
   setTimeout(() => {
     alert("Prepare-se para a fase final!");
     opponent.hpElement.style.backgroundColor = "var(--green)"
-    document.getElementById("mello-sprite").src = "assets/mello_evolved.png"
-    document.getElementById("simoes-sprite").src = "assets/simoes_evolved.png"
+    document.getElementById("opponent-sprite").src = "assets/sr_c_evolved.png"
+    document.getElementById("player-sprite").src = "assets/51m-4o_evolved.png"
     document.getElementById("fight").style.backgroundImage = "url('/assets/icmc_evolved.jpg')"
     for (let i = 0; i <= 1; ++i)
       document.getElementsByClassName("grass")[i].style.backgroundColor = "var(--red)"

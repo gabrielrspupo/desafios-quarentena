@@ -63,7 +63,7 @@ button {
   top: -25px;
 }
 
-#mello {
+#opponent {
   width: 200px;
   padding: 0 20px;
   align-self: flex-end;
@@ -73,7 +73,7 @@ button {
   position: relative;
 }
 
-#mello-sprite {
+#opponent-sprite {
   position: relative;
   left: 10px;
   z-index: 1;
@@ -95,12 +95,12 @@ button {
   transition: 1000ms;
 }
 
-#simoes {
+#player {
  width: 150px;
  padding: 0 20px;
 }
 
-#simoes-sprite {
+#player-sprite {
   position: relative;
   z-index: 1;
   width: inherit;
