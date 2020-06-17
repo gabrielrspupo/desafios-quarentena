@@ -61,6 +61,11 @@ class Grid {
 		*/
 		this.selectedCandy = null;
 
+		/** Bind HUD instance to access its setters
+		 * @type { HUD }
+		 */
+		this.hud = HUD.instance;
+
 		// Creates the grid's element'
 		const element = document.createElement('div');
 		this.rootElement = element;
@@ -288,6 +293,7 @@ class Grid {
 	*/
 	async explodeCandy (candy) {
 		await candy.explode();
+		this.hud.score += 5;
 		this.contents[candy.row][candy.column] = null;
 	}
 
@@ -297,6 +303,7 @@ class Grid {
 	*/
 	async explodeAll () {
 		const explosions = this.findAllPossibleExplosions();
+		this.hud.time += explosions.length;
 
 		const results = await Promise.all(
 			explosions.map(async explosion => {
