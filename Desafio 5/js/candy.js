@@ -32,6 +32,7 @@ class Candy {
 	* @argument { number } row
 	* @argument { number } column
 	* @argument { number } type
+	* @argument { boolean } isRock
 	* @argument { () => void } onClick Function called when the candy is clicked.
 	*/
 	constructor (
@@ -39,6 +40,7 @@ class Candy {
 		row,
 		column,
 		type = Candy.getRandomType(),
+		isRock,
 		onClick
 	) {
 		this.onClick = onClick;
@@ -51,7 +53,9 @@ class Candy {
 
 		this.row = row;
 		this.column = column;
-		this.type = type;
+		this.isRock = isRock;
+		if (!isRock)
+			this.type = type;
 
 		// Subscribes the `onClick` function to be called whenever the candy is clicked.
 		element.addEventListener('click', onClick);
@@ -68,6 +72,8 @@ class Candy {
 	get column () { return this._column; }
 	/** @returns { number } */
 	get type () { return this._type; }
+	/** @returns { boolean } */
+	get isRock () { return this._isRock; }
 
 	/** Will automatically update the candy's grid position, whenever it's row changes */
 	set row (newRow) {
@@ -85,6 +91,15 @@ class Candy {
 	set type (newType) {
 		this.rootElement.style.borderColor = CandyColors[newType];
 		this._type = newType;
+	}
+
+	set isRock (newRockState) {
+		if (newRockState === true) {
+			this.rootElement.style.backgroundColor = 'brown';
+			this.rootElement.style.borderColor = 'brown';
+		}
+
+		this._isRock = newRockState;
 	}
 
 	/** Marks the candy as highlighted (selected by the user) */
@@ -131,6 +146,11 @@ class Candy {
 	* other candy.
 	*/
 	async explode () {
+		if (this.isRock) {
+			
+			Promise.resolve();
+		}
+
 		await sleep(100);
 		this.rootElement.remove();
 	}

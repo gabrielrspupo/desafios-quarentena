@@ -116,6 +116,7 @@ class Grid {
 			row,
 			column,
 			undefined,
+			(Math.random() < 0.1) ? true : false,
 			() => this.onClick(newCandy),
 		);
 		return newCandy;
@@ -327,7 +328,7 @@ class Grid {
 				const candy = this.contents[row][column];
 				if (!candy) continue;
 				const explosion = this.findExplosionAroundCandy(candy);
-				if (explosion) explosions.push(explosion);
+				if (explosion) explosions.push(explosion.filter(e => !e.isRock));
 			}
 		}
 		return explosions;
@@ -353,6 +354,7 @@ class Grid {
 				const newColumn = target.column + offsetColumn;
 				if (this.isOutOfBounds(newRow, newColumn)) break; // Don't go out of bounds
 				target = this.contents[newRow][newColumn];
+				if (target.type === undefined) break;
 			}
 			return group;
 		}
