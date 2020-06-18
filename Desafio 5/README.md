@@ -1,4 +1,6 @@
 # Desafio #5 - Candy Crush
+## Deploy
+Disponível em https://gabrielrspupo.github.io/desafios-quarentena/Desafio%205/index.html
 
 <img src='https://i.imgur.com/BXpVzlH.png'>
 
