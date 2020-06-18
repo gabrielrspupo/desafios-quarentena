@@ -146,11 +146,6 @@ class Candy {
 	* other candy.
 	*/
 	async explode () {
-		if (this.isRock) {
-			
-			Promise.resolve();
-		}
-
 		await sleep(100);
 		this.rootElement.remove();
 	}

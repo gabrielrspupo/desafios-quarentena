@@ -246,12 +246,14 @@ class Grid {
 	* @argument { Candy } candy2
 	*/
 	async swapCandy (candy1, candy2) {
+		let multiplier = 1;
+
 		// Since some animations will now start, prevents the player from playing
 		this.canPlayerPlay = false;
 
 		// swaps the two candy.
 		await this.moveCandy(candy1, candy2.row, candy2.column);
-		const didAnythingExplode = await this.explodeAll();
+		const didAnythingExplode = await this.explodeAll(multiplier++);
 
 		// If nothing exploded, just go back to how it was.
 		if (!didAnythingExplode) {
@@ -262,7 +264,7 @@ class Grid {
 		// possible explosions.
 		else {
 			await this.applyGravity();
-			while (await this.explodeAll()) {
+			while (await this.explodeAll(multiplier++)) {
 				await this.applyGravity();
 			}
 		}
@@ -292,9 +294,9 @@ class Grid {
 	* Function called when a candy is matched, and should be deleted
 	* @argument { Candy } candy
 	*/
-	async explodeCandy (candy) {
+	async explodeCandy (candy, multiplier) {
 		await candy.explode();
-		this.hud.score += 5;
+		this.hud.score += 5 * multiplier;
 		this.contents[candy.row][candy.column] = null;
 	}
 
@@ -302,14 +304,14 @@ class Grid {
 	* This function will explode all found matches.
 	* @returns { boolean } Whether any explosions occurred or not.
 	*/
-	async explodeAll () {
+	async explodeAll (multiplier) {
 		const explosions = this.findAllPossibleExplosions();
 		this.hud.time += explosions.length;
 
 		const results = await Promise.all(
 			explosions.map(async explosion => {
 				await Promise.all(
-					explosion.map(candy => this.explodeCandy(candy))
+					explosion.map(candy => this.explodeCandy(candy, multiplier))
 				);
 				return true;
 			})
