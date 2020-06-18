@@ -3,7 +3,7 @@
 Disponível em https://gabrielrspupo.github.io/desafios-quarentena/Desafio%205/index.html
 
 ## Atribuição
-Ícones por <a href="https://www.flaticon.com/authors/Freepik">freepik</a>, <a href="https://www.flaticon.com/authors/icongeek26">icongeek26 e <a href="https://www.flaticon.com/authors/good-ware">Good Ware</a>
+Ícones por <a href="https://www.flaticon.com/authors/Freepik">freepik</a>, <a href="https://www.flaticon.com/authors/icongeek26">icongeek26</a> e <a href="https://www.flaticon.com/authors/good-ware">Good Ware</a>
 
 <img src='https://i.imgur.com/BXpVzlH.png'>
 

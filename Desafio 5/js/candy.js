@@ -94,7 +94,7 @@ class Candy {
 	/** Will automatically update the candy's border color, whenever it's type changes */
 	set type (newType) {
 		//this.rootElement.style.borderColor = CandyColors[newType];
-		this.rootElement.style.backgroundImage = 'url(../assets/'+CandyColors[newType]+')';
+		this.rootElement.style.backgroundImage = 'url(assets/'+CandyColors[newType]+')';
 		this.rootElement.style.backgroundRepeat = 'no-repeat';
 		this.rootElement.style.backgroundSize = 'cover';
 		this._type = newType;
@@ -106,7 +106,7 @@ class Candy {
 	set isRock (newRockState) {
 		if (newRockState === true) {
 			let fastFood = ['burger.png', 'pizza.png'];
-			this.rootElement.style.backgroundImage = 'url(../assets/'+fastFood[Math.round(Math.random())]+')';
+			this.rootElement.style.backgroundImage = 'url(assets/'+fastFood[Math.round(Math.random())]+')';
 			this.rootElement.style.backgroundRepeat = 'no-repeat';
 			this.rootElement.style.backgroundSize = 'cover';
 		}
