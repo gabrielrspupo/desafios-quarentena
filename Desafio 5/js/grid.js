@@ -6,6 +6,17 @@
 const CANDY_SLIDING_SPEED = 200;
 
 /**
+ * Probability of instanciating a rock on the grid.
+ * @type { number }
+ */
+const ROCK_PROB = 0.025;
+
+/** Probability of instanciating a toxic candy on the grid.
+ * @type { number }
+ */
+const TOXIC_PROB = 0.04;
+
+/**
 * Will create a new Promise that will be resolved after `time` milisseconds.
 * If you'd like to know more about promisses, see this link:
 * https://scotch.io/tutorials/javascript-promises-for-dummies
@@ -116,7 +127,8 @@ class Grid {
 			row,
 			column,
 			undefined,
-			(Math.random() < 0.1) ? true : false,
+			(Math.random() < ROCK_PROB) ? true : false,
+			(Math.random() < TOXIC_PROB) ? true : false,
 			() => this.onClick(newCandy),
 		);
 		return newCandy;
@@ -298,8 +310,12 @@ class Grid {
 	*/
 	async explodeCandy (candy, multiplier) {
 		await candy.explode();
-		// increment score
-		this.hud.score += 5 * multiplier;
+		
+		// decrement score if toxic candy explodes
+		if (candy.isToxic)
+			this.hud.score -= 50;
+		else			// increment score
+			this.hud.score += 5 * multiplier;
 		this.contents[candy.row][candy.column] = null;
 	}
 
@@ -309,7 +325,7 @@ class Grid {
 	*/
 	async explodeAll (multiplier) {
 		const explosions = this.findAllPossibleExplosions();
-		this.hud.time += explosions.length;
+		this.hud.time += explosions.length * multiplier;
 
 		const results = await Promise.all(
 			explosions.map(async explosion => {

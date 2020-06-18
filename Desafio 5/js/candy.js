@@ -41,6 +41,7 @@ class Candy {
 		column,
 		type = Candy.getRandomType(),
 		isRock,
+		isToxic,
 		onClick
 	) {
 		this.onClick = onClick;
@@ -54,6 +55,7 @@ class Candy {
 		this.row = row;
 		this.column = column;
 		this.isRock = isRock;
+		this.isToxic = isToxic;
 		if (!isRock)	// if it's not a rock, assign type
 			this.type = type;
 
@@ -74,6 +76,8 @@ class Candy {
 	get type () { return this._type; }
 	/** @returns { boolean } */
 	get isRock () { return this._isRock; }
+	/** @returns { boolean } */
+	get isToxic () { return this._isToxic; }
 
 	/** Will automatically update the candy's grid position, whenever it's row changes */
 	set row (newRow) {
@@ -101,6 +105,14 @@ class Candy {
 		}
 
 		this._isRock = newRockState;
+	}
+
+	set isToxic (newToxicState) {
+		if (newToxicState === true && !this.isRock) {
+			this.rootElement.style.backgroundColor = 'gray';
+		}
+
+		this._isToxic = newToxicState;
 	}
 
 	/** Marks the candy as highlighted (selected by the user) */

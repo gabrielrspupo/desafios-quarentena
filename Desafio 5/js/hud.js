@@ -1,5 +1,5 @@
 // Initial time of countdown
-const BASE_TIMER = 10;
+const BASE_TIMER = 20;
 
 class HUD {
     /**
@@ -42,7 +42,8 @@ class HUD {
      * @param {number} newScore
      */
     set score(newScore) {
-        this._score = newScore;
+        if (newScore < 0) this._score = 0;
+        else this._score = newScore;
         this.scoreElement.innerHTML = `Score: ${this._score}`;
     }
 
