@@ -246,6 +246,7 @@ class Grid {
 	* @argument { Candy } candy2
 	*/
 	async swapCandy (candy1, candy2) {
+		// Increment scoring when multiple combos are achieved in a round
 		let multiplier = 1;
 
 		// Since some animations will now start, prevents the player from playing
@@ -293,9 +294,11 @@ class Grid {
 	/**
 	* Function called when a candy is matched, and should be deleted
 	* @argument { Candy } candy
+	* @argument { number } multiplier
 	*/
 	async explodeCandy (candy, multiplier) {
 		await candy.explode();
+		// increment score
 		this.hud.score += 5 * multiplier;
 		this.contents[candy.row][candy.column] = null;
 	}
@@ -330,6 +333,7 @@ class Grid {
 				const candy = this.contents[row][column];
 				if (!candy) continue;
 				const explosion = this.findExplosionAroundCandy(candy);
+				// do not explode rocks
 				if (explosion) explosions.push(explosion.filter(e => !e.isRock));
 			}
 		}
@@ -356,6 +360,7 @@ class Grid {
 				const newColumn = target.column + offsetColumn;
 				if (this.isOutOfBounds(newRow, newColumn)) break; // Don't go out of bounds
 				target = this.contents[newRow][newColumn];
+				// avoid pushing group of 3+ rocks
 				if (target.type === undefined) break;
 			}
 			return group;

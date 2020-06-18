@@ -54,7 +54,7 @@ class Candy {
 		this.row = row;
 		this.column = column;
 		this.isRock = isRock;
-		if (!isRock)
+		if (!isRock)	// if it's not a rock, assign type
 			this.type = type;
 
 		// Subscribes the `onClick` function to be called whenever the candy is clicked.
@@ -93,6 +93,7 @@ class Candy {
 		this._type = newType;
 	}
 
+	/** Add 'rock' attributes to element */
 	set isRock (newRockState) {
 		if (newRockState === true) {
 			this.rootElement.style.backgroundColor = 'brown';
