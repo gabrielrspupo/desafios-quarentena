@@ -3,12 +3,12 @@
 * @type { ['red', 'green', 'blue', 'yellow', 'magenta', 'cyan'] }
 */
 const CandyColors = [
-	'red',
-	'green',
-	'blue',
-	'yellow',
-	'magenta',
-	'cyan',
+	'apple.png',
+	'banana.png',
+	'grapes.png',
+	'mango.png',
+	'orange.png',
+	'pineapple.png',
 ];
 
 /**
@@ -93,23 +93,33 @@ class Candy {
 
 	/** Will automatically update the candy's border color, whenever it's type changes */
 	set type (newType) {
-		this.rootElement.style.borderColor = CandyColors[newType];
+		//this.rootElement.style.borderColor = CandyColors[newType];
+		this.rootElement.style.backgroundImage = 'url(../assets/'+CandyColors[newType]+')';
+		this.rootElement.style.backgroundRepeat = 'no-repeat';
+		this.rootElement.style.backgroundSize = 'cover';
 		this._type = newType;
 	}
 
-	/** Add 'rock' attributes to element */
+	/** Add 'rock' attributes to element 
+	* 	Rock elements (fast foods) can't get out of the grid
+	*/
 	set isRock (newRockState) {
 		if (newRockState === true) {
-			this.rootElement.style.backgroundColor = 'brown';
-			this.rootElement.style.borderColor = 'brown';
+			let fastFood = ['burger.png', 'pizza.png'];
+			this.rootElement.style.backgroundImage = 'url(../assets/'+fastFood[Math.round(Math.random())]+')';
+			this.rootElement.style.backgroundRepeat = 'no-repeat';
+			this.rootElement.style.backgroundSize = 'cover';
 		}
 
 		this._isRock = newRockState;
 	}
 
+	/** Add 'toxic' attributes to element
+	* 	Toxic elements (green fruits) decrement scoreboard
+	*/
 	set isToxic (newToxicState) {
 		if (newToxicState === true && !this.isRock) {
-			this.rootElement.style.backgroundColor = 'gray';
+			this.rootElement.style.webkitFilter = 'grayscale(100%) sepia(100%) hue-rotate(120deg)';
 		}
 
 		this._isToxic = newToxicState;
