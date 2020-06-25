@@ -3,6 +3,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const jokempo = require('./jokempo');
 const randomPhrases = require('./random-phrases');
 const helper = require('./helper');
+const answerer = require('./answerer');
 const token = require('./secret');
 
 if (token === 'YOUR ACCESS TOKEN HERE') {
@@ -23,6 +24,8 @@ bot.on('message', async (msg) => {
 	} else if (jokempo.main(bot, chatId, chatMessage)) {
 		return;
 	} else if (helper.main(bot, chatId, chatMessage)) {
+		return;
+	} else if (answerer.main(bot, chatId, chatMessage)) {
 		return;
 	} else {
 		randomPhrases.writeRandomPhrase(bot, chatId);
