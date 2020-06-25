@@ -5,11 +5,14 @@
   "main": "javascript/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node javascript/index.js"
+    "start": "nodemon javascript/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "node-telegram-bot-api": "^0.50.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }
