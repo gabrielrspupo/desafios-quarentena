@@ -1,4 +1,4 @@
-const HELP_TEXT = "/jokempo - Jogue uma partida de jokempô comigo!"
+const HELP_TEXT = "/jokempo - Jogue uma partida de jokempô comigo!\n/faustao - Tente adivinhar o país que estou pensando..."
 
 /**
 * Sends a help message to the user with all the bot commands.
