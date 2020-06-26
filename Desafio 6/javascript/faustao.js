@@ -1,5 +1,5 @@
 const { compareTwoStrings } = require('string-similarity');
-const SIMILARITY_INDEX = 0.8;
+const SIMILARITY_INDEX = 0.4;
 
 // Countries to be guessed
 const countries = [
