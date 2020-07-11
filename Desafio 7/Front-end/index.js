@@ -2,6 +2,11 @@ const serverAddress = 'http://localhost:8080';
 const messageFormElement = document.getElementById('message-form');
 const messagesContainerElem = document.getElementById('messages-container');
 const messageTemplateElem = document.getElementById('message-template');
+// Settings dialog elements
+const settingsButtonElem = document.getElementById('settings-button').getElementsByTagName('button')[0];
+const settingsDialogElem = document.getElementById('settings-dialog');
+const settingsFormElem = document.getElementById('settings');
+const settingsDialogFooterElem = document.getElementById('settings-footer').getElementsByTagName('button');
 
 /**
 * @typedef {{
@@ -17,6 +22,11 @@ const messageTemplateElem = document.getElementById('message-template');
 */
 const renderedMessages = [];
 
+/** @argument { any[] } arr */
+function randomItemFromArray (arr) {
+	return arr[Math.floor(Math.random() * arr.length)];
+}
+
 /*
 * This is an IIFE (Immediatly involked function expression). An IIFE is a function
 * that is called immediatly after it's declaration, without really storing it into
@@ -27,11 +37,6 @@ const renderedMessages = [];
 * https://developer.mozilla.org/en-US/docs/Glossary/IIFE
 */
 const myself = (() => {
-	/** @argument { any[] } arr */
-	function randomItemFromArray (arr) {
-		return arr[Math.floor(Math.random() * arr.length)];
-	}
-
 	// This part is to store the "self" into the localstorage. This is to allow for
 	// the user to come back as themselves later.
 	const myself = localStorage.getItem('self-info');
@@ -126,3 +131,55 @@ async function fetchMessagesFromServer () {
 }
 
 setInterval(fetchMessagesFromServer, 500);
+
+function buildSettingsDialog(my) {
+	document.getElementById('name_input').value = my.name;
+	let selector = document.getElementById('color_select');
+	let fragment = document.createDocumentFragment();
+
+	function createOption(value) {
+		let newOption = document.createElement('option');
+		newOption.value = value; newOption.textContent = value;
+		return newOption
+	}
+
+	// Purge existent color list, if it exists
+	while (selector.firstChild) selector.removeChild(selector.firstChild);
+
+	selector.appendChild(createOption(my.color));
+
+	colors.forEach(color => {
+		if (color === my.color) return;
+		fragment.appendChild(createOption(color));
+	})
+	
+	selector.appendChild(fragment);
+}
+
+settingsButtonElem.addEventListener('click', event => {
+	settingsDialogElem.showModal();
+	buildSettingsDialog(myself);
+});
+
+settingsFormElem.addEventListener('submit', event => {
+	const newMyself = {
+		name: document.getElementById('name_input').value,
+		color: document.getElementById('color_select').value
+	}
+
+	localStorage.setItem('self-info', JSON.stringify(newMyself));
+	myself = newMyself;
+});
+
+settingsDialogFooterElem[0].addEventListener('click', event => {
+	const randomData = {
+		name: `${randomItemFromArray(adjectives)} ${randomItemFromArray(animals)}`,
+		color: randomItemFromArray(colors)
+	}
+	console.log(randomData)
+	buildSettingsDialog(randomData);
+});
+
+settingsDialogFooterElem[1].addEventListener('click', event => {
+	settingsDialogElem.close();
+});

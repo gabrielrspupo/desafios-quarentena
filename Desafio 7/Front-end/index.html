@@ -16,7 +16,27 @@
 	</template>
 	<header>
 		Group Chat
+		<div id="settings-button">
+			<button>settings</button>
+		</div>
 	</header>
+
+	<!-- Code for the user settings popup -->
+	<dialog id="settings-dialog">
+		<form id="settings">
+			<label for="name-value">Name: </label>
+			<input type="text" name="name-value" id="name_input">
+			<label for="color-value">Color: </label>
+			<select name="color-value" id="color_select"></select>
+
+			<button type="submit">Save and close</button>
+		</form>
+		<div id="settings-footer">
+			<button>Randomize</button>
+			<button>Close without saving</button>
+		</div>
+	</dialog>
+
 	<main>
 		<div id="messages-container"></div>
 		<form id="message-form">
