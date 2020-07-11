@@ -56,11 +56,24 @@ const myself = (() => {
 messageFormElement.addEventListener('submit', event => {
 	event.preventDefault();
 
+	function getTimestamp() {
+		const today = new Date();
+
+		const day = String(today.getDate()).padStart(2, '0');
+		const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+		const year = today.getFullYear();
+		const hours = String(today.getHours()).padStart(2, '0');
+		const minutes = String(today.getMinutes()).padStart(2, '0');
+
+		return `${day}/${month}/${year} ${hours}:${minutes}`;
+	}
+
 	// Selects the input from the form
 	const messageElement = messageFormElement.querySelector('input[name=message-value]');
 	const messageText = messageElement.value;
 	if (!messageText) return;
-	const message = { text: messageText, sender: myself };
+	const messageTimestamp = getTimestamp();
+	const message = { text: messageText, sender: myself, timestamp: messageTimestamp };
 	sendMessageToServer(message);
 
 	// Clears the message text input
@@ -89,10 +102,12 @@ function createMessageOnUI (message) {
 	const messageNode = messageTemplateElem.content.cloneNode(true);
 	const messageContainerElement = messageNode.querySelector('.message-container');
 	const messageNameElement = messageNode.querySelector('.message-name');
+	const messageTimestampElement = messageNode.querySelector('.message-timestamp');
 	const messageTextElement = messageNode.querySelector('.message-text');
 
 	messageNameElement.innerText = message.sender.name;
 	messageNameElement.style.color = message.sender.color;
+	messageTimestampElement.innerText = message.timestamp;
 	messageTextElement.innerText = message.text;
 
 	// If I was the sender, push the message element to the right
