@@ -36,7 +36,7 @@ function randomItemFromArray (arr) {
 * Learn more about IIFE here:
 * https://developer.mozilla.org/en-US/docs/Glossary/IIFE
 */
-const myself = (() => {
+let myself = (() => {
 	// This part is to store the "self" into the localstorage. This is to allow for
 	// the user to come back as themselves later.
 	const myself = localStorage.getItem('self-info');
@@ -186,7 +186,9 @@ settingsFormElem.addEventListener('submit', event => {
 	myself = newMyself;
 });
 
-settingsDialogFooterElem[0].addEventListener('click', event => {
+const [ dialogRandomizeButton, dialogCloseButton ] = settingsDialogFooterElem;
+
+dialogRandomizeButton.addEventListener('click', event => {
 	const randomData = {
 		name: `${randomItemFromArray(adjectives)} ${randomItemFromArray(animals)}`,
 		color: randomItemFromArray(colors)
@@ -195,6 +197,6 @@ settingsDialogFooterElem[0].addEventListener('click', event => {
 	buildSettingsDialog(randomData);
 });
 
-settingsDialogFooterElem[1].addEventListener('click', event => {
+dialogCloseButton.addEventListener('click', event => {
 	settingsDialogElem.close();
 });
