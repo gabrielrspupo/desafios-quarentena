@@ -56,6 +56,9 @@ let myself = (() => {
 messageFormElement.addEventListener('submit', event => {
 	event.preventDefault();
 
+	/**
+	 * Get current time and date.
+	 */
 	function getTimestamp() {
 		const today = new Date();
 
@@ -146,12 +149,19 @@ async function fetchMessagesFromServer () {
 }
 
 setInterval(fetchMessagesFromServer, 500);
-
+/**
+ * Build the user settings modal window.
+ * @param  { Object } my User info - current name and color
+ */
 function buildSettingsDialog(my) {
 	document.getElementById('name_input').value = my.name;
 	let selector = document.getElementById('color_select');
 	let fragment = document.createDocumentFragment();
 
+	/**
+	 * Create new <option> element to insert into colors dropdown
+	 * @param  { string } value a color value
+	 */
 	function createOption(value) {
 		let newOption = document.createElement('option');
 		newOption.value = value; newOption.textContent = value;
@@ -161,8 +171,10 @@ function buildSettingsDialog(my) {
 	// Purge existent color list, if it exists
 	while (selector.firstChild) selector.removeChild(selector.firstChild);
 
+	// Insert current user color first
 	selector.appendChild(createOption(my.color));
 
+	// Create colors dropdown
 	colors.forEach(color => {
 		if (color === my.color) return;
 		fragment.appendChild(createOption(color));
@@ -171,11 +183,13 @@ function buildSettingsDialog(my) {
 	selector.appendChild(fragment);
 }
 
+// Open modal window when user clicks setting button
 settingsButtonElem.addEventListener('click', event => {
 	settingsDialogElem.showModal();
 	buildSettingsDialog(myself);
 });
 
+// Save new user settings and store into local storage
 settingsFormElem.addEventListener('submit', event => {
 	const newMyself = {
 		name: document.getElementById('name_input').value,
@@ -188,15 +202,17 @@ settingsFormElem.addEventListener('submit', event => {
 
 const [ dialogRandomizeButton, dialogCloseButton ] = settingsDialogFooterElem;
 
+// Generate user settings and display it
 dialogRandomizeButton.addEventListener('click', event => {
 	const randomData = {
 		name: `${randomItemFromArray(adjectives)} ${randomItemFromArray(animals)}`,
 		color: randomItemFromArray(colors)
 	}
-	console.log(randomData)
+	
 	buildSettingsDialog(randomData);
 });
 
+// Closes user settings modal window
 dialogCloseButton.addEventListener('click', event => {
 	settingsDialogElem.close();
 });
