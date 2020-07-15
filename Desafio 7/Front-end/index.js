@@ -156,6 +156,8 @@ setInterval(fetchMessagesFromServer, 500);
 function buildSettingsDialog(my) {
 	document.getElementById('name_input').value = my.name;
 	let selector = document.getElementById('color_select');
+
+	// Light-weight document instance used to decrease re-rendering when appending multiple elements
 	let fragment = document.createDocumentFragment();
 
 	/**
@@ -180,6 +182,7 @@ function buildSettingsDialog(my) {
 		fragment.appendChild(createOption(color));
 	})
 	
+	// Append it to the DOM tree
 	selector.appendChild(fragment);
 }
 
