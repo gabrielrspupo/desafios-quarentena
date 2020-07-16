@@ -1,4 +1,4 @@
-const serverAddress = 'http://localhost:8080';
+const serverAddress = 'http://localhost:9090';
 const messageFormElement = document.getElementById('message-form');
 const messagesContainerElem = document.getElementById('messages-container');
 const messageTemplateElem = document.getElementById('message-template');
@@ -22,11 +22,6 @@ const settingsDialogFooterElem = document.getElementById('settings-footer').getE
 */
 const renderedMessages = [];
 
-/** @argument { any[] } arr */
-function randomItemFromArray (arr) {
-	return arr[Math.floor(Math.random() * arr.length)];
-}
-
 /*
 * This is an IIFE (Immediatly involked function expression). An IIFE is a function
 * that is called immediatly after it's declaration, without really storing it into
@@ -36,21 +31,38 @@ function randomItemFromArray (arr) {
 * Learn more about IIFE here:
 * https://developer.mozilla.org/en-US/docs/Glossary/IIFE
 */
-let myself = (() => {
+
+let myself = undefined;
+
+(async () => {
 	// This part is to store the "self" into the localstorage. This is to allow for
 	// the user to come back as themselves later.
-	const myself = localStorage.getItem('self-info');
-	if (myself) return JSON.parse(myself);
+	const storedMyself = localStorage.getItem('self-info');
+	if (storedMyself) myself = JSON.parse(storedMyself);
 
-	const newMyself = {
-		name: `${randomItemFromArray(adjectives)} ${randomItemFromArray(animals)}`,
-		color: randomItemFromArray(colors),
+	else {
+		const newMyself = await (await fetch(`${serverAddress}/user`)).json();
+		localStorage.setItem('self-info', JSON.stringify(newMyself));
+		myself = newMyself;
+
+		await commitUser(myself);
+	}
+})();
+
+async function commitUser(userInfo) {
+	let response = undefined;
+	try {
+		response = await fetch(`${serverAddress}/user`, {
+			body: JSON.stringify(userInfo),
+			headers: { 'Content-Type': 'application/json' },
+			method: 'POST',
+		});
+	} catch (e) {
+		console.error(e);
 	}
 
-	localStorage.setItem('self-info', JSON.stringify(newMyself));
-
-	return newMyself;
-})();
+	return response;
+}
 
 // Function executed when the user "sends" the message
 messageFormElement.addEventListener('submit', event => {
@@ -193,29 +205,41 @@ settingsButtonElem.addEventListener('click', event => {
 });
 
 // Save new user settings and store into local storage
-settingsFormElem.addEventListener('submit', event => {
+settingsFormElem.addEventListener('submit', (event) => {
+	event.preventDefault();
+
 	const newMyself = {
 		name: document.getElementById('name_input').value,
 		color: document.getElementById('color_select').value
-	}
+	};
 
-	localStorage.setItem('self-info', JSON.stringify(newMyself));
-	myself = newMyself;
+	(async () => {
+		const response = await commitUser(newMyself);
+		if (response.status !== 500) {
+			localStorage.setItem('self-info', JSON.stringify(newMyself));
+			myself = newMyself;
+			document.getElementById('errors').innerHTML = '';
+			settingsDialogElem.close();
+		} else {
+			document.getElementById('errors').innerHTML = 'Name and color already in use. Choose another option!';
+		}
+	})();
+
+	
 });
 
 const [ dialogRandomizeButton, dialogCloseButton ] = settingsDialogFooterElem;
 
 // Generate user settings and display it
 dialogRandomizeButton.addEventListener('click', event => {
-	const randomData = {
-		name: `${randomItemFromArray(adjectives)} ${randomItemFromArray(animals)}`,
-		color: randomItemFromArray(colors)
+	async function getRandomData() {
+		return await (await fetch(`${serverAddress}/user`)).json();
 	}
-	
-	buildSettingsDialog(randomData);
+	(async () => {buildSettingsDialog(await getRandomData());})();
 });
 
 // Closes user settings modal window
 dialogCloseButton.addEventListener('click', event => {
+	document.getElementById('errors').innerHTML = '';
 	settingsDialogElem.close();
 });

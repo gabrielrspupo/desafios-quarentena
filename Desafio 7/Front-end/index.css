@@ -81,3 +81,9 @@ main {
 #settings-footer {
 	margin-top: 2vh;
 }
+
+#errors {
+	height: 2vh;
+	font-size: 2vh;
+	width: auto;
+}

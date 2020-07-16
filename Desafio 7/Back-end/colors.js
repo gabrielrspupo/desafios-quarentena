@@ -119,3 +119,5 @@ const colors = [
 	'yellowgreen',
 	'rebeccapurple',
 ];
+
+module.exports = colors;
