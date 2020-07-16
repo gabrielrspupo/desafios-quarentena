@@ -1,4 +1,4 @@
-const serverAddress = 'http://localhost:9090';
+const serverAddress = 'http://localhost:9999';
 const messageFormElement = document.getElementById('message-form');
 const messagesContainerElem = document.getElementById('messages-container');
 const messageTemplateElem = document.getElementById('message-template');
@@ -49,6 +49,10 @@ let myself = undefined;
 	}
 })();
 
+/**
+ * POST user info to the backend to save it, if already in use, receives server error.
+ * @param  { Object } userInfo
+ */
 async function commitUser(userInfo) {
 	let response = undefined;
 	try {
@@ -215,12 +219,13 @@ settingsFormElem.addEventListener('submit', (event) => {
 
 	(async () => {
 		const response = await commitUser(newMyself);
+		// if user data inserted aren't in use, change user
 		if (response.status !== 500) {
 			localStorage.setItem('self-info', JSON.stringify(newMyself));
 			myself = newMyself;
 			document.getElementById('errors').innerHTML = '';
 			settingsDialogElem.close();
-		} else {
+		} else { // otherwise prompt user to change data
 			document.getElementById('errors').innerHTML = 'Name and color already in use. Choose another option!';
 		}
 	})();
